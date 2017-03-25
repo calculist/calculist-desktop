@@ -36347,8 +36347,8 @@ skew:0},9126:{depth:.64502,height:1.155,italic:0,skew:0},9127:{depth:1e-5,height
 group:"textord",replace:"\u03a5"},"\\Phi":{font:"main",group:"textord",replace:"\u03a6"},"\\Psi":{font:"main",group:"textord",replace:"\u03a8"},"\\Omega":{font:"main",group:"textord",replace:"\u03a9"},"\\neg":{font:"main",group:"textord",replace:"\xac"},"\\lnot":{font:"main",group:"textord",replace:"\xac"},"\\top":{font:"main",group:"textord",replace:"\u22a4"},"\\bot":{font:"main",group:"textord",replace:"\u22a5"},"\\emptyset":{font:"main",group:"textord",replace:"\u2205"},"\\varnothing":{font:"ams",group:"textord",replace:"\u2205"},"\\alpha":{font:"main",group:"mathord",replace:"\u03b1"},"\\beta":{font:"main",group:"mathord",replace:"\u03b2"},"\\gamma":{font:"main",group:"mathord",replace:"\u03b3"},"\\delta":{font:"main",group:"mathord",replace:"\u03b4"},"\\epsilon":{font:"main",group:"mathord",replace:"\u03f5"},"\\zeta":{font:"main",group:"mathord",replace:"\u03b6"},"\\eta":{font:"main",group:"mathord",replace:"\u03b7"},"\\theta":{font:"main",group:"mathord",replace:"\u03b8"},"\\iota":{font:"main",group:"mathord",replace:"\u03b9"},"\\kappa":{font:"main",group:"mathord",replace:"\u03ba"},"\\lambda":{font:"main",group:"mathord",replace:"\u03bb"},"\\mu":{font:"main",group:"mathord",replace:"\u03bc"},"\\nu":{font:"main",group:"mathord",replace:"\u03bd"},"\\xi":{font:"main",group:"mathord",replace:"\u03be"},"\\omicron":{font:"main",group:"mathord",replace:"o"},"\\pi":{font:"main",group:"mathord",replace:"\u03c0"},"\\rho":{font:"main",group:"mathord",replace:"\u03c1"},"\\sigma":{font:"main",group:"mathord",replace:"\u03c3"},"\\tau":{font:"main",group:"mathord",replace:"\u03c4"},"\\upsilon":{font:"main",group:"mathord",replace:"\u03c5"},"\\phi":{font:"main",group:"mathord",replace:"\u03d5"},"\\chi":{font:"main",group:"mathord",replace:"\u03c7"},"\\psi":{font:"main",group:"mathord",replace:"\u03c8"},"\\omega":{font:"main",group:"mathord",replace:"\u03c9"},"\\varepsilon":{font:"main",group:"mathord",replace:"\u03b5"},"\\vartheta":{font:"main",group:"mathord",replace:"\u03d1"},"\\varpi":{font:"main",group:"mathord",replace:"\u03d6"},"\\varrho":{font:"main",group:"mathord",replace:"\u03f1"},"\\varsigma":{font:"main",group:"mathord",replace:"\u03c2"},"\\varphi":{font:"main",group:"mathord",replace:"\u03c6"},"*":{font:"main",group:"bin",replace:"\u2217"},"+":{font:"main",group:"bin"},"-":{font:"main",group:"bin",replace:"\u2212"},"\\cdot":{font:"main",group:"bin",replace:"\u22c5"},"\\circ":{font:"main",group:"bin",replace:"\u2218"},"\\div":{font:"main",group:"bin",replace:"\xf7"},"\\pm":{font:"main",group:"bin",replace:"\xb1"},"\\times":{font:"main",group:"bin",replace:"\xd7"},"\\cap":{font:"main",group:"bin",replace:"\u2229"},"\\cup":{font:"main",group:"bin",replace:"\u222a"},"\\setminus":{font:"main",group:"bin",replace:"\u2216"},"\\land":{font:"main",group:"bin",replace:"\u2227"},"\\lor":{font:"main",group:"bin",replace:"\u2228"},"\\wedge":{font:"main",group:"bin",replace:"\u2227"},"\\vee":{font:"main",group:"bin",replace:"\u2228"},"\\surd":{font:"main",group:"textord",replace:"\u221a"},"(":{font:"main",group:"open"},"[":{font:"main",group:"open"},"\\langle":{font:"main",group:"open",replace:"\u27e8"},"\\lvert":{font:"main",group:"open",replace:"\u2223"},"\\lVert":{font:"main",group:"open",replace:"\u2225"},")":{font:"main",group:"close"},"]":{font:"main",group:"close"},"?":{font:"main",group:"close"},"!":{font:"main",group:"close"},"\\rangle":{font:"main",group:"close",replace:"\u27e9"},"\\rvert":{font:"main",group:"close",replace:"\u2223"},"\\rVert":{font:"main",group:"close",replace:"\u2225"},"=":{font:"main",group:"rel"},"<":{font:"main",group:"rel"},">":{font:"main",group:"rel"},":":{font:"main",group:"rel"},"\\approx":{font:"main",group:"rel",replace:"\u2248"},"\\cong":{font:"main",group:"rel",replace:"\u2245"},"\\ge":{font:"main",group:"rel",replace:"\u2265"},"\\geq":{font:"main",group:"rel",replace:"\u2265"},"\\gets":{font:"main",group:"rel",replace:"\u2190"},"\\in":{font:"main",group:"rel",replace:"\u2208"},"\\notin":{font:"main",group:"rel",replace:"\u2209"},"\\subset":{font:"main",group:"rel",replace:"\u2282"},"\\supset":{font:"main",group:"rel",replace:"\u2283"},"\\subseteq":{font:"main",group:"rel",replace:"\u2286"},"\\supseteq":{font:"main",group:"rel",replace:"\u2287"},"\\nsubseteq":{font:"ams",group:"rel",replace:"\u2288"},"\\nsupseteq":{font:"ams",group:"rel",replace:"\u2289"},"\\models":{font:"main",group:"rel",replace:"\u22a8"},"\\leftarrow":{font:"main",group:"rel",replace:"\u2190"},"\\le":{font:"main",group:"rel",replace:"\u2264"},"\\leq":{font:"main",group:"rel",replace:"\u2264"},"\\ne":{font:"main",group:"rel",replace:"\u2260"},"\\neq":{font:"main",group:"rel",replace:"\u2260"},"\\rightarrow":{font:"main",group:"rel",replace:"\u2192"},"\\to":{font:"main",group:"rel",replace:"\u2192"},"\\ngeq":{font:"ams",group:"rel",replace:"\u2271"},"\\nleq":{font:"ams",group:"rel",replace:"\u2270"},"\\!":{font:"main",group:"spacing"},"\\ ":{font:"main",group:"spacing",replace:"\xa0"},"~":{font:"main",group:"spacing",replace:"\xa0"},"\\,":{font:"main",group:"spacing"},"\\:":{font:"main",group:"spacing"},"\\;":{font:"main",group:"spacing"},"\\enspace":{font:"main",group:"spacing"},"\\qquad":{font:"main",group:"spacing"},"\\quad":{font:"main",group:"spacing"},"\\space":{font:"main",group:"spacing",replace:"\xa0"},",":{font:"main",group:"punct"},";":{font:"main",group:"punct"},"\\colon":{font:"main",group:"punct",replace:":"},"\\barwedge":{font:"ams",group:"bin",replace:"\u22bc"},"\\veebar":{font:"ams",group:"bin",replace:"\u22bb"},"\\odot":{font:"main",group:"bin",replace:"\u2299"},"\\oplus":{font:"main",group:"bin",replace:"\u2295"},"\\otimes":{font:"main",group:"bin",replace:"\u2297"},"\\partial":{font:"main",group:"textord",replace:"\u2202"},"\\oslash":{font:"main",group:"bin",replace:"\u2298"},"\\circledcirc":{font:"ams",group:"bin",replace:"\u229a"},"\\boxdot":{font:"ams",group:"bin",replace:"\u22a1"},"\\bigtriangleup":{font:"main",group:"bin",replace:"\u25b3"},"\\bigtriangledown":{font:"main",group:"bin",replace:"\u25bd"},"\\dagger":{font:"main",group:"bin",replace:"\u2020"},"\\diamond":{font:"main",group:"bin",replace:"\u22c4"},"\\star":{font:"main",group:"bin",replace:"\u22c6"},"\\triangleleft":{font:"main",group:"bin",replace:"\u25c3"},"\\triangleright":{font:"main",group:"bin",replace:"\u25b9"},"\\{":{font:"main",group:"open",replace:"{"},"\\}":{font:"main",group:"close",replace:"}"},"\\lbrace":{font:"main",group:"open",replace:"{"},"\\rbrace":{font:"main",group:"close",replace:"}"},"\\lbrack":{font:"main",group:"open",replace:"["},"\\rbrack":{font:"main",group:"close",replace:"]"},"\\lfloor":{font:"main",group:"open",replace:"\u230a"},"\\rfloor":{font:"main",group:"close",replace:"\u230b"},"\\lceil":{font:"main",group:"open",replace:"\u2308"},"\\rceil":{font:"main",group:"close",replace:"\u2309"},"\\backslash":{font:"main",group:"textord",replace:"\\"},"|":{font:"main",group:"textord",replace:"\u2223"},"\\vert":{font:"main",group:"textord",replace:"\u2223"},"\\|":{font:"main",group:"textord",replace:"\u2225"},"\\Vert":{font:"main",group:"textord",replace:"\u2225"},"\\uparrow":{font:"main",group:"rel",replace:"\u2191"},"\\Uparrow":{font:"main",group:"rel",replace:"\u21d1"},"\\downarrow":{font:"main",group:"rel",replace:"\u2193"},"\\Downarrow":{font:"main",group:"rel",replace:"\u21d3"},"\\updownarrow":{font:"main",group:"rel",replace:"\u2195"},"\\Updownarrow":{font:"main",group:"rel",replace:"\u21d5"},"\\coprod":{font:"math",group:"op",replace:"\u2210"},"\\bigvee":{font:"math",group:"op",replace:"\u22c1"},"\\bigwedge":{font:"math",group:"op",replace:"\u22c0"},"\\biguplus":{font:"math",group:"op",replace:"\u2a04"},"\\bigcap":{font:"math",group:"op",replace:"\u22c2"},"\\bigcup":{font:"math",group:"op",replace:"\u22c3"},"\\int":{font:"math",group:"op",replace:"\u222b"},"\\intop":{font:"math",group:"op",replace:"\u222b"},"\\iint":{font:"math",group:"op",replace:"\u222c"},"\\iiint":{font:"math",group:"op",replace:"\u222d"},"\\prod":{font:"math",group:"op",replace:"\u220f"},"\\sum":{font:"math",group:"op",replace:"\u2211"},"\\bigotimes":{font:"math",group:"op",replace:"\u2a02"},"\\bigoplus":{font:"math",group:"op",replace:"\u2a01"},"\\bigodot":{font:"math",group:"op",replace:"\u2a00"},"\\oint":{font:"math",group:"op",replace:"\u222e"},"\\bigsqcup":{font:"math",group:"op",replace:"\u2a06"},"\\smallint":{font:"math",group:"op",replace:"\u222b"},"\\ldots":{font:"main",group:"inner",replace:"\u2026"},"\\cdots":{font:"main",group:"inner",replace:"\u22ef"},"\\ddots":{font:"main",group:"inner",replace:"\u22f1"},"\\vdots":{font:"main",group:"textord",replace:"\u22ee"},"\\acute":{font:"main",group:"accent",replace:"\xb4"},"\\grave":{font:"main",group:"accent",replace:"`"},"\\ddot":{font:"main",group:"accent",replace:"\xa8"},"\\tilde":{font:"main",group:"accent",replace:"~"},"\\bar":{font:"main",group:"accent",replace:"\xaf"},"\\breve":{font:"main",group:"accent",replace:"\u02d8"},"\\check":{font:"main",group:"accent",replace:"\u02c7"},"\\hat":{font:"main",group:"accent",replace:"^"},"\\vec":{font:"main",group:"accent",replace:"\u20d7"},"\\dot":{font:"main",group:"accent",replace:"\u02d9"},"\\imath":{font:"main",group:"mathord",replace:"\u0131"},"\\jmath":{font:"main",group:"mathord",replace:"\u0237"}},text:{"\\ ":{font:"main",group:"spacing",replace:"\xa0"}," ":{font:"main",group:"spacing",replace:"\xa0"},"~":{font:"main",group:"spacing",replace:"\xa0"}}};var a='0123456789/@."';for(var r=0;r<a.length;r++){var l=a.charAt(r);h.math[l]={font:"main",group:"textord"}}var s="0123456789`!@*()-=+[]'\";:?/.,";for(var r=0;r<s.length;r++){var l=s.charAt(r);h.text[l]={font:"main",group:"textord"}}var p="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";for(var r=0;r<p.length;r++){var l=p.charAt(r);h.math[l]={font:"main",group:"mathord"};h.text[l]={font:"main",group:"textord"}}t.exports=h},{}],23:[function(e,t,i){var h=Array.prototype.indexOf;var a=function(e,t){if(e==null){return-1}if(h&&e.indexOf===h){return e.indexOf(t)}var i=0,a=e.length;for(;i<a;i++){if(e[i]===t){return i}}return-1};var r=function(e,t){return a(e,t)!==-1};var l=function(e,t){return e===undefined?t:e};var s=/([A-Z])/g;var p=function(e){return e.replace(s,"-$1").toLowerCase()};var c={"&":"&amp;",">":"&gt;","<":"&lt;",'"':"&quot;","'":"&#x27;"};var n=/[&><"']/g;function o(e){return c[e]}function g(e){return(""+e).replace(n,o)}var d;if(typeof document!=="undefined"){var w=document.createElement("span");if("textContent"in w){d=function(e,t){e.textContent=t}}else{d=function(e,t){e.innerText=t}}}function u(e){d(e,"")}t.exports={contains:r,deflt:l,escape:g,hyphenate:p,indexOf:a,setTextContent:d,clearNode:u}},{}]},{},[1])(1)});
 /**
  * @license
- * evalculist 0.1.0
- * Copyright 2016 Dan Allison <dan@calculist.io> and Calculist LLC <http://calculist.io>
+ * evalculist 0.2.0
+ * Copyright 2017 Dan Allison <dan@calculist.io> and Calculist LLC <http://calculist.io>
  * Released under MIT license
  */
 
@@ -36361,6 +36361,8 @@ group:"textord",replace:"\u03a5"},"\\Phi":{font:"main",group:"textord",replace:"
   var OPEN_SQUARE = '[';
   var CLOSE_SQUARE = ']';
   var DOT = '.';
+  var EQUALS_SIGN = '=';
+  var SEMICOLON = ';';
   var TOKEN_TYPE_INDEX = 0;
   var TOKEN_STRING_INDEX = 1;
   var PAREN_DEPTH_INDEX = 2;
@@ -36368,6 +36370,7 @@ group:"textord",replace:"\u03a5"},"\\Phi":{font:"main",group:"textord",replace:"
   var VAR_FUNCTION_NAME = 'variable';
   var DOT_ACC_FUNCTION_NAME = 'dotAccessor';
   var SQUARE_ACC_FUNCTION_NAME = 'bracketAccessor';
+  var ASSIGN_FUNCTION_NAME = 'assignment';
   var ESCAPED_DOUBLE_QUOTES_PLACEHOLDER = "______adsfasdfrtrssgoivdfoijwpdfoijdfg_______";
   var ESCAPED_DOUBLE_QUOTES_PATTERN = new RegExp(ESCAPED_DOUBLE_QUOTES_PLACEHOLDER, 'g');
   var ESCAPED_SINGLE_QUOTES_PLACEHOLDER = "______oiwjefoijfviojdfhweoiufhoihsdfoi_______";
@@ -36426,7 +36429,25 @@ group:"textord",replace:"\u03a5"},"\\Phi":{font:"main",group:"textord",replace:"
           expressions.push(exp);
         }
       } else if (t[TOKEN_TYPE_INDEX] === VAR_TOKEN) {
-        expressions.push(VAR_FUNCTION_NAME + '("' + t[TOKEN_STRING_INDEX] + '")');
+        var varName = t[TOKEN_STRING_INDEX];
+        var nextT = tokens[i + 1];
+        while (nextT && (/^\s+$/).test(nextT[TOKEN_STRING_INDEX])) nextT = tokens[++i + 1];
+        if (nextT && nextT[TOKEN_TYPE_INDEX] === EQUALS_SIGN) {
+          nextT = tokens[++i];
+          var nextExp = '';
+          if (nextT && nextT[PAREN_DEPTH_INDEX] >= pd) {
+            nextExp = compile(tokens, ++i);
+            while (nextT && nextT[PAREN_DEPTH_INDEX] >= pd) nextT = tokens[++i];
+          }
+          var exp = ASSIGN_FUNCTION_NAME + '("' + varName + '",' + nextExp + ')';
+          if (expressions.length) {
+            expressions[expressions.length - 1] += exp;
+          } else {
+            expressions.push(exp);
+          }
+        } else {
+          expressions.push(VAR_FUNCTION_NAME + '("' + varName + '")');
+        }
       } else {
         expressions.push(t[TOKEN_STRING_INDEX]);
       }
@@ -36438,6 +36459,7 @@ group:"textord",replace:"\u03a5"},"\\Phi":{font:"main",group:"textord",replace:"
 
   function evalculist (code, handlers) {
     var tokens = [];
+    var lines = [tokens];
     var parenDepth = 0;
     var sqrBrktDepth = 0;
     code.replace(/\\"/g , ESCAPED_DOUBLE_QUOTES_PLACEHOLDER)
@@ -36452,7 +36474,7 @@ group:"textord",replace:"\u03a5"},"\\Phi":{font:"main",group:"textord",replace:"
             tokens.push([EXPRESSION_TOKEN, sqChunk, parenDepth, sqrBrktDepth]);
           }
         } else {
-          sqChunk.split(/(\(|\)|\[|\]|\.|(?:[a-zA-Z\d_\$]+))/g).forEach(function (token) {
+          sqChunk.split(/(\(|\)|\[|\]|\.|\=|\;|(?:[a-zA-Z\d_\$]+))/g).forEach(function (token) {
             if (!token) return;
             if (/[a-zA-Z\d_\$]+/.test(token)) {
               if (isDigit(token[0])) {
@@ -36478,6 +36500,11 @@ group:"textord",replace:"\u03a5"},"\\Phi":{font:"main",group:"textord",replace:"
               tokens.push([CLOSE_SQUARE, token, parenDepth, sqrBrktDepth]);
             } else if (token === DOT) {
               tokens.push([DOT, token, parenDepth, sqrBrktDepth]);
+            } else if (token === EQUALS_SIGN) {
+              tokens.push([EQUALS_SIGN, token, parenDepth, sqrBrktDepth]);
+            } else if (token === SEMICOLON && parenDepth === 0 && sqrBrktDepth === 0) {
+              tokens = [];
+              lines.push(tokens);
             } else {
               if (tokens.length && tokens[tokens.length - 1][0] === EXPRESSION_TOKEN){
                 tokens[tokens.length - 1][TOKEN_STRING_INDEX] += token;
@@ -36489,31 +36516,43 @@ group:"textord",replace:"\u03a5"},"\\Phi":{font:"main",group:"textord",replace:"
         }
       });
     });
-    var string = compile(tokens, 0)
-                .replace(ESCAPED_DOUBLE_QUOTES_PATTERN, '\\"')
-                .replace(ESCAPED_SINGLE_QUOTES_PATTERN, "\\'");
-    if (handlers === true) return string;
+    lines = lines.reduce(function (lines, tokens) {
+      if (tokens.length) {
+        lines.push(
+          compile(tokens, 0)
+            .replace(ESCAPED_DOUBLE_QUOTES_PATTERN, '\\"')
+            .replace(ESCAPED_SINGLE_QUOTES_PATTERN, "\\'")
+        );
+      }
+      return lines;
+    }, []);
+    if (handlers === true) return lines.join(SEMICOLON);
+    lines[lines.length - 1] = 'return ' + lines[lines.length - 1];
     var fn = new Function(
       VAR_FUNCTION_NAME,
       SQUARE_ACC_FUNCTION_NAME,
       DOT_ACC_FUNCTION_NAME,
-      "'use strict';return " + string
+      ASSIGN_FUNCTION_NAME,
+      "'use strict';" + lines.join(SEMICOLON)
     );
     if (!handlers) return function (handlers) {
       var variable = handlers.variable;
       var bracketAccessor =  handlers.bracketAccessor || handlers.accessor;
       var dotAccessor =  handlers.dotAccessor || handlers.accessor;
-      return fn(variable, bracketAccessor, dotAccessor);
+      var assignment =  handlers.assignment;
+      return fn(variable, bracketAccessor, dotAccessor, assignment);
     };
     var variable = handlers.variable;
     var bracketAccessor =  handlers.bracketAccessor || handlers.accessor;
     var dotAccessor =  handlers.dotAccessor || handlers.accessor;
-    return fn(variable, bracketAccessor, dotAccessor);
+    var assignment =  handlers.assignment;
+    return fn(variable, bracketAccessor, dotAccessor, assignment);
   };
 
   evalculist.context = {};
   evalculist.variable = function (name) { return evalculist.context[name]; };
   evalculist.accessor = function (object, key) { return object[key]; };
+  evalculist.assignment = function (name, val) { return evalculist.context[name] = val; };
 
   evalculist.new = function (handlers) {
     return function (code) { return evalculist(code, handlers); };
@@ -36522,7 +36561,8 @@ group:"textord",replace:"\u03a5"},"\\Phi":{font:"main",group:"textord",replace:"
   evalculist.newFromContext = function (context) {
     var handlers = {
       variable: function (name) { return context[name]; },
-      accessor: function (object, key) { return object[key]; }
+      accessor: function (object, key) { return object[key]; },
+      assignment: function (name, val) { return context[name] = val; }
     };
     return function (code) { return evalculist(code, handlers); };
   };
@@ -37899,6 +37939,12 @@ calculist.register('computeItemValue', ['_','createComputationContextObject','ev
           var val = valueContext.dotAccessor(obj, attr);
           if (val === item) return NaN;
           return val;
+        },
+        assignment: function (name, val) {
+          isForCommand || (item.hasVariableReference = true);
+          item.assignLocalVar(name, val);
+          if (!variables) variables = {};
+          return variables[name] = val;
         }
       });
       item.isComputingValue = false;
@@ -38003,8 +38049,10 @@ calculist.register('createComputationContextObject', ['_','ss','evalculist','isI
   var mathKeys = ['E','LN2','LN10','LOG2E','LOG10E','PI','SQRT1_2','SQRT2','abs','acos','acosh','asin','asinh','atan','atan2','atanh','cbrt','ceil','clz32','cos','cosh','exp','expm1','floor','fround','hypot','imul','log','log1p','log2','log10','max','min','pow','random','round','sign','sin','sinh','sqrt','tan','tanh','trunc'];
 
   _.each(mathKeys, function(key) { proto[key] = Math[key]; });
-  _.extend(proto, ss);
-  proto.mixin = null;
+
+  var ssKeys = ['median','mode','product','variance','sampleVariance','standardDeviation','sampleStandardDeviation','medianAbsoluteDeviation','interquartileRange','harmonicMean','geometricMean','rootMeanSquare','sampleSkewness','factorial'];
+
+  _.each(ssKeys, function(key) { proto[key] = ss[key]; });
 
   var lodashKeys = ['difference','intersection','reverse','union','uniq','xor',
                     'filter','find','findLast','map','reduce','zip','unzip',
@@ -38014,7 +38062,8 @@ calculist.register('createComputationContextObject', ['_','ss','evalculist','isI
                     'toUpper','truncate','upperCase','words','times','identity'];
   _.each(lodashKeys, function (key) { proto[key] = _[key]; });
 
-  var valIfItem = function (item) { return isItem(item) ? item.val : item; };
+  var valIfItem = function (item) { return isItem(item) ? item.valueOf() : item; };
+  var itemsIfItem = function (item) { return isItem(item) ? item.items : item; };
 
   var conditionals = ['isArray','isNumber','isFunction','isString'];
 
@@ -38041,6 +38090,15 @@ calculist.register('createComputationContextObject', ['_','ss','evalculist','isI
     }, 0);
   };
 
+  proto.quantile = function (sample, p) {
+    if (_.isNumber(p)) return ss.quantile(sample, p);
+  };
+
+  proto.interquartileRange = function (items) {
+    var values = _.map(items, valIfItem);
+    return ss.interquartileRange(values);
+  };
+
   // var multiOps =
 
   proto.products = function (arr) {
@@ -38058,12 +38116,16 @@ calculist.register('createComputationContextObject', ['_','ss','evalculist','isI
     for (x = 1; x <= k; x++) coeff /= x;
     return coeff;
   };
-  proto.fraction = function (numerator,denominator){
-    var gcd = function gcd(a,b){
-      return b != 0 ? gcd(b, a%b) : a;
-    };
-    gcd = gcd(numerator,denominator);
-    return '' + numerator/gcd + '/' +  denominator/gcd;
+  proto.isInteger = function (n) { return _.isNumber(n) && n % 1 === 0; }
+  proto.gcd = function (a, b) {
+    var _gcd = function (a, b) { return b !== 0 ? _gcd(b, a % b) : a; };
+    if (proto.isInteger(a) && proto.isInteger(b)) return _gcd(a, b);
+    return NaN;
+  }
+  proto.lcm = function (a, b) { return Math.abs(a) * (Math.abs(b) / proto.gcd(a, b)); }
+  proto.fraction = function (numerator,denominator) {
+    var gcd = proto.gcd(numerator,denominator);
+    return '' + (numerator / gcd) + '/' +  (denominator / gcd);
   };
   proto.polarToCartesian = function (r, theta) {
     var x = r * Math.cos(theta),
@@ -38103,6 +38165,10 @@ calculist.register('createComputationContextObject', ['_','ss','evalculist','isI
   proto.itemsOf = _.property('items');
   proto.nameOf = _.property('key');
   proto.parentOf = _.property('parent');
+  proto.indexOf = function (array, item) {
+    array = itemsIfItem(array);
+    return array.indexOf(item);
+  };
   proto.pluckItems = function (items, key) {
     var condition;
     if (_.isFunction(key)) {
@@ -38110,10 +38176,12 @@ calculist.register('createComputationContextObject', ['_','ss','evalculist','isI
     } else {
       condition = { key: key };
     }
-    if (isItem(items)) items = items.items;
-    return items.map(function (item) {
-      return _.find(item.items, condition);
-    });
+    items = itemsIfItem(items);
+    return items.reduce(function (pluckedItems, item) {
+      var pluckedItem = _.find(item.items, condition);
+      if (pluckedItem) pluckedItems.push(pluckedItem);
+      return pluckedItems;
+    }, []);
   };
 
   proto.flowMap = function () {
@@ -38241,7 +38309,7 @@ calculist.register('createComputationContextObject', ['_','ss','evalculist','isI
   });
 
   proto.flatten = function (items) {
-    if (isItem(items)) items = items.items;
+    items = itemsIfItem(items);
     if (isItem(items[0])) {
       return _.reduce(items, function (flatItems, item) {
         flatItems.push(item);
@@ -38254,7 +38322,7 @@ calculist.register('createComputationContextObject', ['_','ss','evalculist','isI
   }
 
   proto.uniq = proto.unique = function (items) {
-    if (isItem(items)) items = items.items;
+    items = itemsIfItem(items);
     items = _.map(items, proto.valueOf);
     return _.uniq(items);
   };
@@ -38442,6 +38510,41 @@ calculist.register('item.applyDelta', ['_','getItemByGuid'], function (_, getIte
   };
 
 });
+calculist.register('item.applyLocalStyle',['_'], function (_) {
+
+  var backgroundMap = {
+    blue: 'deepskyblue',
+    red: 'crimson',
+    yellow: 'yellow',
+    green: 'forestgreen',
+    orange: 'orange',
+    purple: 'purple',
+    tan: 'burlywood',
+    pink: 'hotpink',
+    lightpink: 'lightpink',
+  }
+
+  return function(localVars) {
+    localVars || (localVars = this.localVars);
+    if (!localVars) return;
+    var $input, style;
+    if (localVars.hasOwnProperty('$background')) {
+      var background = backgroundMap[localVars.$background];
+      $input || ($input = this.$('#input' + this.id));
+      style || (style = $input[0].style);
+      style.background = background || null;
+    }
+    if (localVars.hasOwnProperty('$hidden')) {
+      // TODO Actually hide the item
+      if (localVars.$hidden) {
+        this.$el.css({opacity: 0.2});
+      } else {
+        this.$el.css({opacity: 1});
+      }
+    }
+  };
+
+});
 calculist.register('item.applySyntaxHighlighting',[], function () {
 
   var specialItems = {
@@ -38460,6 +38563,24 @@ calculist.register('item.applySyntaxHighlighting',[], function () {
       this.isSpecial = false;
       this.$("#input" + this.id).removeClass('special-item');
     }
+  };
+
+});
+calculist.register('item.assignLocalVar',['_'], function (_) {
+
+  var possibleNames = ['$background','$hidden'].reduce(function (nameObject, name) {
+    nameObject[name] = name;
+    return nameObject;
+  }, {});
+
+  return function(name, val) {
+    var name = possibleNames[name];
+    if (!name) return;
+    this.localVars || (this.localVars = {});
+    var prevVal = this.localVars[name];
+    if (val === prevVal) return;
+    this.localVars[name] = val;
+    this.applyLocalStyle();
   };
 
 });
@@ -39611,6 +39732,7 @@ calculist.require(['Item','_','itemOfFocus'], function (Item, _, itemOfFocus) {
     };
     this.$el.html(this.template(templateData));
     this.addOrRemoveClasses();
+    this.applyLocalStyle();
     this.renderChildren();
     this.delegateEvents();
     return this;
@@ -39647,6 +39769,7 @@ calculist.require(['Item','_','itemOfFocus'], function (Item, _, itemOfFocus) {
       this.computedDisplayIsVisible = false;
     }
     this.addOrRemoveClasses();
+    this.applyLocalStyle();
     if (!this.collapsed) {
       _.each(this.items, _.method('softRender'));
     }
