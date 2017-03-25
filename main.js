@@ -85,7 +85,7 @@ app.on('ready', function () {
           accelerator: 'CmdOrCtrl+O',
           click () {
             dialog.showOpenDialog({properties: ['openFile']}, function (filePaths) {
-              createWindow(filePaths[0])
+              if (filePaths) createWindow(filePaths[0])
             })
           }
         },
