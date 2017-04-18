@@ -19609,11 +19609,12 @@ calculist.register('parseItemText', ['_'], function (_) {
 
   var TEMPORARY_PLACEHOLDER = 'DSFGSpRGBoSAERSFDGSDrFGDFGSDFwGWESRTBGFzAE';
 
-  var separators = ['[=]','[=>]','[:]'],
+  var separators = ['[:]','[=]','[=>]','[=#]'],
       splitters = {
+        '[:]': /(\[:\])/,
         '[=]': /(\[=\])/,
         '[=>]': /(\[=\>\])/,
-        '[:]': /(\[:\])/,
+        '[=#]': /(\[=\#\])/,
       };
 
   var parseWithSeparator = function (text, separator) {
@@ -20001,16 +20002,14 @@ calculist.register('createComputationContextObject', ['_','ss','evalculist','isI
     return proto.pluckItems(obj, key);
   };
 
-  proto.dotAccessor = function (obj, key) {
-    if (isItem(obj)) {
-      var item = _.findLast(obj.items, function (item) {
-        return keyToVarName(item.key) === key;
-      });
-      if (item && item.hasVal) return item.valueOf();
-      return item;
-    } else {
-      return proto.accessor(obj, key);
-    }
+  proto.dotAccessor = function (items, key) {
+    items = itemsIfItem(items);
+    var item = _.findLast(items, function (item) {
+      if (!item.key) item.valueOf();
+      return keyToVarName(item.key) === key;
+    });
+    if (item && item.hasVal) return item.valueOf();
+    return item;
   };
 
   var iterators = ['sum','count','average','mean','median','mode','standardDeviation','products',

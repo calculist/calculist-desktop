@@ -36704,6 +36704,17 @@ group:"textord",replace:"\u03a5"},"\\Phi":{font:"main",group:"textord",replace:"
 var window = this;
 window.sessionStorage || (window.sessionStorage = {});
 window.calculist = acyclic.new();
+calculist.register('calculistFileFormatter', ['_', 'parseTextDoc'], function (_, parseTextDoc) {
+
+  return {
+    toCalculistFile: function (topItem) {
+      return topItem.toText(0, {computed: false, prependGuid: true});
+    },
+    parseFile: function (fileString) {
+      return parseTextDoc(fileString, {withGuids: true});
+    }
+  }
+});
 calculist.register('getNewGuid', [], function () {
 
   return function() {
@@ -37210,7 +37221,7 @@ calculist.require(['_','$','transaction','computeItemValue','cursorPosition','co
       if (itemsOnly) {
         text = _.map(_this.items, _.method('toText', 0, computed, hideCollapsed)).join('');
       } else {
-        text = _this.toText(0, computed, hideCollapsed);
+        text = _this.toText(0, {computed: computed, hideCollapsed: hideCollapsed});
       }
       copyToClipboard(text).then(function () {
         _this.focus();
@@ -37300,14 +37311,14 @@ calculist.require(['_','$','transaction','computeItemValue','cursorPosition','co
     },
     downloadAsTxt: function (_this, filename, computed) {
       filename || (filename =  _this.text);
-      downloadFile(_this.toText(0, computed), 'text/txt', filename + '.txt');
+      downloadFile(_this.toText(0, {computed: computed}), 'text/txt', filename + '.txt');
     },
     downloadAsComputedTxt: function (_this, filename) {
       commands.downloadAsTxt(_this, filename, true);
     },
     downloadBackup: function (_this, filename) {
       filename || (filename =  window.topItem.text + '_' + (new Date()).toJSON().substring(0, 10));
-      downloadFile(window.topItem.toText(0, false), 'text/txt', filename + '.txt');
+      downloadFile(window.topItem.toText(0, {computed: false}), 'text/txt', filename + '.txt');
     },
     // exportAsPDF: ,
     // exportAsHTML: ,
@@ -37833,8 +37844,7 @@ calculist.register('Item', ['_','Backbone','$','getNewGuid','eventHub'], functio
       if (i === -1) {
         return false;
       }
-      this.items.splice(i + 1, 0, child);
-      child.refreshSortOrder();
+      this.insertAt(child, i + 1);
       return true;
     };
 
@@ -37844,8 +37854,7 @@ calculist.register('Item', ['_','Backbone','$','getNewGuid','eventHub'], functio
       if (i === -1) {
         return;
       }
-      this.items.splice(i, 0, child);
-      child.refreshSortOrder();
+      this.insertAt(child, i);
     };
 
     Item.prototype.refreshDepth = function() {
@@ -37868,8 +37877,14 @@ calculist.register('Item', ['_','Backbone','$','getNewGuid','eventHub'], functio
       return new Item(options);
     };
 
-    Item.prototype.toText = function(depth, computed, hideCollapsed) {
+    Item.prototype.toText = function(depth, options) {
       eventHub.trigger('somethingHasChanged');
+      var computed, hideCollapsed, prependGuid;
+      if (options) {
+        computed = options.computed;
+        hideCollapsed = options.hideCollapsed;
+        prependGuid = options.prependGuid;
+      }
       var nestedText, text;
       if (!depth) depth = 0;
       if (computed !== false) computed = true;
@@ -37877,9 +37892,9 @@ calculist.register('Item', ['_','Backbone','$','getNewGuid','eventHub'], functio
       if ((hideCollapsed && this.collapsed) || this.items.length === 0) {
         nestedText = '';
       } else {
-        nestedText = _.map(this.items, _.method('toText', depth + 2, computed, hideCollapsed)).join('');
+        nestedText = _.map(this.items, _.method('toText', depth + 2, options)).join('');
       }
-      return _.repeat(' ', depth) + _.trim(text) + '\n' + nestedText;
+      return (prependGuid ? (this.guid + '|') : '') + _.repeat(' ', depth) + _.trim(text) + '\n' + nestedText;
     };
 
     Item.prototype.deleteItem = function(youAreSure) {
@@ -38284,16 +38299,14 @@ calculist.register('createComputationContextObject', ['_','ss','evalculist','isI
     return proto.pluckItems(obj, key);
   };
 
-  proto.dotAccessor = function (obj, key) {
-    if (isItem(obj)) {
-      var item = _.findLast(obj.items, function (item) {
-        return keyToVarName(item.key) === key;
-      });
-      if (item && item.hasVal) return item.valueOf();
-      return item;
-    } else {
-      return proto.accessor(obj, key);
-    }
+  proto.dotAccessor = function (items, key) {
+    items = itemsIfItem(items);
+    var item = _.findLast(items, function (item) {
+      if (!item.key) item.valueOf();
+      return keyToVarName(item.key) === key;
+    });
+    if (item && item.hasVal) return item.valueOf();
+    return item;
   };
 
   var iterators = ['sum','count','average','mean','median','mode','standardDeviation','products',
@@ -38568,7 +38581,7 @@ calculist.register('item.applySyntaxHighlighting',[], function () {
 });
 calculist.register('item.assignLocalVar',['_'], function (_) {
 
-  var possibleNames = ['$background','$hidden'].reduce(function (nameObject, name) {
+  var possibleNames = ['$name','$background','$hidden'].reduce(function (nameObject, name) {
     nameObject[name] = name;
     return nameObject;
   }, {});
@@ -38576,6 +38589,12 @@ calculist.register('item.assignLocalVar',['_'], function (_) {
   return function(name, val) {
     var name = possibleNames[name];
     if (!name) return;
+    if (name === '$name') {
+      if (val == null || this.key === val) return;
+      if (this.parsedText.separator) val += ' ' + this.parsedText.separator + this.parsedText.val;
+      this.changeText(val);
+      return;
+    }
     this.localVars || (this.localVars = {});
     var prevVal = this.localVars[name];
     if (val === prevVal) return;
@@ -38584,12 +38603,18 @@ calculist.register('item.assignLocalVar',['_'], function (_) {
   };
 
 });
-calculist.register('item.changeText', ['_','transaction','eventHub'], function (_, transaction, eventHub) {
+calculist.register('item.changeText', ['_','transaction','eventHub','parseItemText'], function (_, transaction, eventHub, parseItemText) {
 
   return function(newText) {
+    if (this.text === newText) return;
     eventHub.trigger('item.changeText:before', this);
     transaction.debounced(_.noop);
     this.text = newText;
+    var prevKey = this.key;
+    this.evalFn = null;
+    this.parseItemText = parseItemText(this.text);
+    this.key = this.parseItemText.key;
+    if (this.key !== prevKey) eventHub.trigger('keychange', prevKey, this.key);
     this.save();
     eventHub.trigger('item.changeText', this);
   };
@@ -38783,8 +38808,11 @@ calculist.require(['Item','_','isReadOnly'], function (Item, _, isReadOnly) {
     events["focus #input" + id] = 'handleFocus';
     events["blur #input" + id] = 'handleBlur';
     events["paste #input" + id] = 'handlePaste';
+    events["mousemove .input-container:first"] = 'handleMousemove';
+    events["mouseout .input-container:first"] = 'handleMouseout';
     if (isReadOnly()) events["click #input" + id] = 'focus';
     events["click #dot" + id] = 'handleDotClick';
+    events["mousedown #dot" + id] = 'handleDotMousedown';
     events["dblclick #input" + id] = 'enterCommandMode';
     return events;
   };
@@ -38801,6 +38829,7 @@ calculist.register('executeCommand', ['_', 'commands', 'transaction', 'computeIt
 
   return function (contextItem, commandString) {
     var commandStringPieces = commandString.split(/([^\w\s]|\d)/);
+    if (commandStringPieces[0] === '') commandStringPieces[0] = 'noop';
     commandStringPieces[0] = _.camelCase(commandStringPieces[0]);
     if (commandStringPieces[0] === 'delete') commandStringPieces[0] = '_delete';
     if (contextItem.mode === 'command' && !_.isFunction(commands[commandStringPieces[0]]) ) {
@@ -39170,6 +39199,9 @@ calculist.register('item.handleDotClick', ['_','transaction'], function (_, tran
   };
 
 });
+calculist.register('item.handleDotMousedown', ['itemOfDrag'], function (itemOfDrag) {
+  return function () { itemOfDrag.change(this); };
+});
 calculist.register('item.handleEnter',['_','$','cursorPosition','executeCommand'],function (_, $, cursorPosition, executeCommand) {
 
   var addNewItem = function (_this, newItemText) {
@@ -39210,9 +39242,11 @@ calculist.register('item.handleEnter',['_','$','cursorPosition','executeCommand'
   };
 
 });
-calculist.require(['Item', 'cursorPosition','isReadOnly','itemOfFocus'], function (Item, cursorPosition, isReadOnly, itemOfFocus) {
+calculist.require(['Item', 'cursorPosition','isReadOnly','itemOfFocus','itemOfDrag'], function (Item, cursorPosition, isReadOnly, itemOfFocus, itemOfDrag) {
 
-  Item.prototype.handleFocus = function() {
+  Item.prototype.handleFocus = function(e) {
+    var dragItem = itemOfDrag.get();
+    if (dragItem && itemOfDrag !== this) return e.preventDefault();
     itemOfFocus.change(this);
     sessionStorage.focusGuid = this.guid;
     if (isReadOnly()) return;
@@ -39324,13 +39358,14 @@ calculist.register('item.handleKeydown', ['_','$','customKeyboardShortcuts','cur
       }
     } else if (e.which === 68 && e.ctrlKey && e.shiftKey) { // 68 = d
       transaction(executeCommand, null, this, 'duplicate');
-    } else if (e.which === 190 && e.shiftKey && !e.ctrlKey && !e.altKey) { // 190 = >
+    } else if ((e.which === 51 || e.which === 190) && e.shiftKey && !e.ctrlKey && !e.altKey) { // 51 = # and 190 = >
       if (this.text.substring(anchorOffset - 3, anchorOffset) === '[=]') {
         e.preventDefault();
         (function () {
           var $input = this.$('#input' + this.id);
           var textArray = _.toArray($input.text());
-          textArray.splice(anchorOffset - 3, anchorOffset, '[=>]');
+          var char = e.which === 51 ? '#' : '>';
+          textArray.splice(anchorOffset - 3, anchorOffset, '[=' + char + ']');
           $input.text(textArray.join(''));
           var range = document.createRange();
           var sel = window.getSelection();
@@ -39375,9 +39410,48 @@ calculist.register('item.handleKeyup', ['cursorPosition','itemOfFocus'], functio
   };
 
 });
-calculist.require(['Item','_','parseTextDoc','getNewGuid','transaction','itemOfFocus'], function (Item, _, parseTextDoc, getNewGuid, transaction, itemOfFocus) {
+calculist.register('item.handleMousemove', ['itemOfDrag'], function (itemOfDrag) {
+  return function(e) {
+    var dragItem = itemOfDrag.get();
+    if (!dragItem || dragItem === this) return;
+    var nextParent = this.parent;
+    while (nextParent) {
+      if (nextParent === dragItem) return;
+      nextParent = nextParent.parent;
+    }
+    e.preventDefault();
+    var target = this;
+    var direction = e.offsetY < 8 ? 'above' : 'below';
+    var opposite = direction == 'above' ? 'below' : 'above';
+    var $inputContainer = this.$('.input-container:first');
+    if (!this.collapsed && this.items.length) {
+      if (direction === 'below' || !this.parent) {
+        $inputContainer.removeClass('drop-target-above');
+        target = this.items[0];
+        direction = 'above';
+        this.items[0].$('.input-container:first').addClass('drop-target-above');
+      } else {
+        $inputContainer.addClass('drop-target-above');
+        this.items[0].$('.input-container:first').removeClass('drop-target-above');
+      }
+    } else {
+      $inputContainer.addClass('drop-target-' + direction).removeClass('drop-target-' + opposite);
+    }
+    itemOfDrag.changeTarget(target, direction);
+  };
+});
+calculist.register('item.handleMouseout', ['itemOfDrag'], function (itemOfDrag) {
+  return function() {
+    if (!itemOfDrag.get()) return;
+    this.$('.input-container:first').removeClass('drop-target-above drop-target-below');
+    if (!this.collapsed && this.items.length){
+      this.items[0].$('.input-container:first').removeClass('drop-target-above drop-target-below');
+    }
+  };
+});
+calculist.require(['Item','_','parseTextDoc','getNewGuid','transaction','itemOfFocus','itemsByGuid','calculistFileFormatter'], function (Item, _, parseTextDoc, getNewGuid, transaction, itemOfFocus, itemsByGuid, calculistFileFormatter) {
 
-  Item.prototype.handlePaste = function(e) {
+  Item.prototype.handlePaste = function(e, options) {
     if (this.mode === 'command') return;
     var content, selectionEnd, selectionStart, _ref, _ref1;
     // content =  ? e : e.originalEvent.clipboardData.getData('text/plain');
@@ -39390,17 +39464,22 @@ calculist.require(['Item','_','parseTextDoc','getNewGuid','transaction','itemOfF
     }
     if (content.split('\n').length > 1) {
       transaction(function () {
-        var items = parseTextDoc(content),
-            firstItem = items.shift();
+        var isCalculistFile = options && options.isCalculistFile;
+        var items = isCalculistFile ? calculistFileFormatter.parseFile(content) : parseTextDoc(content);
+        var firstItem = items.shift();
         if (itemOfFocus.is(this)) {
           this.insertTextAtCursor(firstItem.text);
         } else {
           this.changeText(firstItem.text);
         }
+        if (isCalculistFile) {
+          this.guid = firstItem.guid;
+          itemsByGuid[this.guid] = this;
+        }
         newChildren = firstItem.items.map((function(_this) {
           return function(item) {
             item.parent = _this;
-            item.guid = getNewGuid();
+            item.guid || (item.guid = getNewGuid());
             return new Item(item);
           };
         })(this));
@@ -39803,7 +39882,7 @@ calculist.require(['Item','itemOfFocus'], function (Item, itemOfFocus) {
     if (itemOfFocus.is(this)) {
       this.valueOf();
       val = this.val;
-      if (this.valIsComputed) {
+      if (this.valIsComputed && this.hasVal) {
         val = this.formatVal(val);
         $cd = this.$("#computed-display" + this.id);
         $cd.text("" + val).css({
@@ -40120,11 +40199,10 @@ calculist.require(['Item','_','parseItemText','computeItemValue','somethingHasCh
   };
 
   Item.prototype.valueOf = function () {
-    if ((this.parsedText || {}).text !== this.text || (this.hasVariableReference && this.lastAnimationFrame !== syncAnimationFrame() && somethingHasChanged())) {
+    var parsedText = this.parsedText || {};
+    if (parsedText.text !== this.text || (this.hasVariableReference && this.lastAnimationFrame !== syncAnimationFrame() && somethingHasChanged())) {
       this.lastAnimationFrame = syncAnimationFrame();
-      var prevKey = this.key;
-      var parsedText = this.parsedText;
-      if (!parsedText || parsedText.text !== this.text) {
+      if (parsedText.text !== this.text) {
         this.evalFn = null;
         parsedText = (this.parsedText = parseItemText(this.text));
       }
@@ -40162,6 +40240,13 @@ calculist.require(['Item','_','parseItemText','computeItemValue','somethingHasCh
             this.val.toString = _.constant( parsedText.val);
             this._valueOf = this.val;
             break;
+          case ('[=#]'):
+            this.hasVal = false;
+            this.valIsComputed = true;
+            this.val = null;
+            this._valueOf = this.parsedText.key;
+            computeItemValue(parsedText.val, this);
+            break;
           case ('[:]'):
             this.hasVal = true;
             this.val = _.trim(parsedText.val);
@@ -40177,7 +40262,6 @@ calculist.require(['Item','_','parseItemText','computeItemValue','somethingHasCh
         this.val = null;
         this._valueOf = this.text;
       }
-      if (this.key !== prevKey) eventHub.trigger('keychange', prevKey, this.key);
     }
 
     return this._valueOf;
@@ -40226,6 +40310,84 @@ calculist.require(['Item','_','$','lmSessionStorage','zoomPage'], function (Item
   };
 
 });
+calculist.register('itemOfDrag', ['transaction','$'], function (transaction, $) {
+  var itemOfDrag, dropTarget, dropDirection, $mainContainer, $standin;
+
+  var removeClassesAndStandin = function () {
+    $mainContainer || ($mainContainer = $('#main-container'));
+    $mainContainer.removeClass('dragging');
+    if ($standin) $standin.remove();
+    $standin = null;
+    itemOfDrag.$el.removeClass('dragging').removeAttr('style');
+  };
+
+  var resetVariables = function () {
+    itemOfDrag = null;
+    dropTarget = null;
+    dropDirection = null;
+  };
+
+  document.addEventListener('mousemove', function (e) {
+    if (!itemOfDrag) return;
+    $mainContainer || ($mainContainer = $('#main-container'));
+    $mainContainer.addClass('dragging');
+    if (!$standin) {
+      $standin = $('<li class="dragging-standin"></li>').height(itemOfDrag.$el.height());
+      $standin.insertAfter(itemOfDrag.$el);
+      itemOfDrag.$el.addClass('dragging');
+    }
+    itemOfDrag.$el.offset({
+      top: (e.clientY + document.body.scrollTop) - 10,
+      left: e.clientX + 3,
+    });
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (itemOfDrag && e.which === 27) { // 27 = esc
+      removeClassesAndStandin();
+      itemOfDrag.parent.render();
+      resetVariables();
+    }
+  });
+
+  document.addEventListener('mouseup', function () {
+    if (itemOfDrag) {
+      removeClassesAndStandin();
+    }
+    if (itemOfDrag && dropTarget && itemOfDrag !== dropTarget) {
+      var previousParent = itemOfDrag.parent;
+      var newParent = dropTarget.parent;
+      var nextNewParent = newParent;
+      while (nextNewParent) {
+        if (nextNewParent === itemOfDrag) {
+          resetVariables();
+          return;
+        }
+        nextNewParent = nextNewParent.parent;
+      }
+      transaction(function () {
+        previousParent.removeChild(itemOfDrag);
+        newParent[dropDirection === 'above' ? 'insertBefore' : 'insertAfter'](itemOfDrag, dropTarget);
+      });
+      previousParent.render();
+      if (newParent !== previousParent) newParent.render();
+      itemOfDrag.focus();
+    }
+    resetVariables();
+  });
+
+  return {
+    change: function (item) {
+      itemOfDrag = item;
+    },
+    changeTarget: function (target, direction) {
+      dropTarget = target;
+      dropDirection = direction;
+    },
+    get: function () { return itemOfDrag; },
+  }
+})
+;
 calculist.register('itemOfFocus', ['eventHub'], function (eventHub) {
   var itemOfFocus;
   return {
@@ -40249,11 +40411,12 @@ calculist.register('parseItemText', ['_'], function (_) {
 
   var TEMPORARY_PLACEHOLDER = 'DSFGSpRGBoSAERSFDGSDrFGDFGSDFwGWESRTBGFzAE';
 
-  var separators = ['[=]','[=>]','[:]'],
+  var separators = ['[:]','[=]','[=>]','[=#]'],
       splitters = {
+        '[:]': /(\[:\])/,
         '[=]': /(\[=\])/,
         '[=>]': /(\[=\>\])/,
-        '[:]': /(\[:\])/,
+        '[=#]': /(\[=\#\])/,
       };
 
   var parseWithSeparator = function (text, separator) {
@@ -40287,18 +40450,26 @@ calculist.register('parseItemText', ['_'], function (_) {
 });
 calculist.register('parseTextDoc', ['_'], function (_) {
 
-  return function (textDoc) {
-    var flatDoc, flatDocById, flatListsByDepth, justData, lines;
-    lines = _.compact(textDoc.split('\n'));
-    flatDoc = [];
-    flatDocById = {};
-    flatListsByDepth = {};
+  var GUID_SEPARATOR = '|';
+
+  return function (textDoc, options) {
+    var withGuids = options ? options.withGuids : null;
+    var lines = _.compact(textDoc.split('\n'));
+    var flatDoc = [];
+    var flatDocById = {};
+    var flatListsByDepth = {};
     _.each(lines, function(line) {
       var chars, index, item, previousItem, previousItemAtThisDepth, _name;
       item = {};
       flatDoc.push(item);
       index = flatDoc.length - 1;
       previousItem = flatDoc[index - 1];
+      var guid;
+      if (withGuids) {
+        line = line.split(GUID_SEPARATOR);
+        guid = line.shift();
+        line = line.join(GUID_SEPARATOR);
+      }
       chars = _.toArray(line);
       item.depth = _.takeWhile(chars, function(char) {
         return char === ' ';
@@ -40318,15 +40489,18 @@ calculist.register('parseTextDoc', ['_'], function (_) {
       }
       item.items = item.children = [];
       item.text = chars.slice(item.depth).join('');
+      item.guid = guid;
     });
-    return (justData = function(items) {
+    var justData = function(items) {
       return _.map(items, function(item) {
         return {
           text: item.text,
-          items: item.items.length ? justData(item.items) : []
+          items: item.items.length ? justData(item.items) : [],
+          guid: item.guid,
         };
       });
-    })(flatListsByDepth[0]);
+    };
+    return justData(flatListsByDepth[0]);
   };
 
 });
@@ -41334,7 +41508,7 @@ calculist.register('zoomPage',['_','$','Promise','lmSessionStorage','getItemByGu
         dimensions[attr] = item.$el[attr]();
         return dimensions;
       }, {});
-      $standin = $('<li id=standin"' + item.id + '"></li>').height(originalDimensions.height);
+      $standin = $('<li></li>').height(originalDimensions.height);
       stack.push({
         $page: $page,
         item: item,
@@ -41470,7 +41644,7 @@ calculist.register('http', ['Promise','_','$'], function (Promise, _, $) {
 
 });
 // TODO refactor
-calculist.init(['LIST_DATA','Item','_','$','Backbone','lmDiff','saveButton','getAndApplyChangesFromServer','jsonToItemTree','getNewGuid','userPreferences','executeCommand'], function (foo, Item, _, $, Backbone, lmDiff, saveButton, getAndApplyChangesFromServer, jsonToItemTree, getNewGuid, userPreferences, executeCommand) {
+calculist.init(['LIST_DATA','Item','_','$','Backbone','lmDiff','saveButton','getAndApplyChangesFromServer','jsonToItemTree','getNewGuid','userPreferences','executeCommand','calculistFileFormatter'], function (foo, Item, _, $, Backbone, lmDiff, saveButton, getAndApplyChangesFromServer, jsonToItemTree, getNewGuid, userPreferences, executeCommand, calculistFileFormatter) {
   window.DEV_MODE = window.localStorage.DEV_MODE;
   var jsonView = window.location.search.split('?json=')[1];
   if (jsonView) {
@@ -41491,7 +41665,7 @@ calculist.init(['LIST_DATA','Item','_','$','Backbone','lmDiff','saveButton','get
         console.log(filePath)
         _.defer(function () {
           var fs = require('fs');
-          window.topItem.handlePaste(fs.readFileSync(filePath, 'utf8'));
+          window.topItem.handlePaste(fs.readFileSync(filePath, 'utf8'), {isCalculistFile: _.endsWith(filePath, '.calculist') });
           var markAsCollapsed = function (item) {
             if (item.items.length) {
               item.collapsed = item.parent && true;
@@ -41543,7 +41717,8 @@ calculist.init(['LIST_DATA','Item','_','$','Backbone','lmDiff','saveButton','get
         if (window.READ_ONLY) return resolve();
         if (filePath) {
           var fs = require('fs');
-          fs.writeFileSync(filePath, window.topItem.toText(0, false), 'utf8');
+          var fileContent = _.endsWith(filePath, '.calculist') ? calculistFileFormatter.toCalculistFile(window.topItem) : window.topItem.toText(0, {computed: false});
+          fs.writeFileSync(filePath, fileContent, 'utf8');
           saveButton.changeStatus('saved');
           return window.topItem.waitingBeforeSave = false;
         }
