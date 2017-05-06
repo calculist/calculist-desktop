@@ -36347,7 +36347,7 @@ skew:0},9126:{depth:.64502,height:1.155,italic:0,skew:0},9127:{depth:1e-5,height
 group:"textord",replace:"\u03a5"},"\\Phi":{font:"main",group:"textord",replace:"\u03a6"},"\\Psi":{font:"main",group:"textord",replace:"\u03a8"},"\\Omega":{font:"main",group:"textord",replace:"\u03a9"},"\\neg":{font:"main",group:"textord",replace:"\xac"},"\\lnot":{font:"main",group:"textord",replace:"\xac"},"\\top":{font:"main",group:"textord",replace:"\u22a4"},"\\bot":{font:"main",group:"textord",replace:"\u22a5"},"\\emptyset":{font:"main",group:"textord",replace:"\u2205"},"\\varnothing":{font:"ams",group:"textord",replace:"\u2205"},"\\alpha":{font:"main",group:"mathord",replace:"\u03b1"},"\\beta":{font:"main",group:"mathord",replace:"\u03b2"},"\\gamma":{font:"main",group:"mathord",replace:"\u03b3"},"\\delta":{font:"main",group:"mathord",replace:"\u03b4"},"\\epsilon":{font:"main",group:"mathord",replace:"\u03f5"},"\\zeta":{font:"main",group:"mathord",replace:"\u03b6"},"\\eta":{font:"main",group:"mathord",replace:"\u03b7"},"\\theta":{font:"main",group:"mathord",replace:"\u03b8"},"\\iota":{font:"main",group:"mathord",replace:"\u03b9"},"\\kappa":{font:"main",group:"mathord",replace:"\u03ba"},"\\lambda":{font:"main",group:"mathord",replace:"\u03bb"},"\\mu":{font:"main",group:"mathord",replace:"\u03bc"},"\\nu":{font:"main",group:"mathord",replace:"\u03bd"},"\\xi":{font:"main",group:"mathord",replace:"\u03be"},"\\omicron":{font:"main",group:"mathord",replace:"o"},"\\pi":{font:"main",group:"mathord",replace:"\u03c0"},"\\rho":{font:"main",group:"mathord",replace:"\u03c1"},"\\sigma":{font:"main",group:"mathord",replace:"\u03c3"},"\\tau":{font:"main",group:"mathord",replace:"\u03c4"},"\\upsilon":{font:"main",group:"mathord",replace:"\u03c5"},"\\phi":{font:"main",group:"mathord",replace:"\u03d5"},"\\chi":{font:"main",group:"mathord",replace:"\u03c7"},"\\psi":{font:"main",group:"mathord",replace:"\u03c8"},"\\omega":{font:"main",group:"mathord",replace:"\u03c9"},"\\varepsilon":{font:"main",group:"mathord",replace:"\u03b5"},"\\vartheta":{font:"main",group:"mathord",replace:"\u03d1"},"\\varpi":{font:"main",group:"mathord",replace:"\u03d6"},"\\varrho":{font:"main",group:"mathord",replace:"\u03f1"},"\\varsigma":{font:"main",group:"mathord",replace:"\u03c2"},"\\varphi":{font:"main",group:"mathord",replace:"\u03c6"},"*":{font:"main",group:"bin",replace:"\u2217"},"+":{font:"main",group:"bin"},"-":{font:"main",group:"bin",replace:"\u2212"},"\\cdot":{font:"main",group:"bin",replace:"\u22c5"},"\\circ":{font:"main",group:"bin",replace:"\u2218"},"\\div":{font:"main",group:"bin",replace:"\xf7"},"\\pm":{font:"main",group:"bin",replace:"\xb1"},"\\times":{font:"main",group:"bin",replace:"\xd7"},"\\cap":{font:"main",group:"bin",replace:"\u2229"},"\\cup":{font:"main",group:"bin",replace:"\u222a"},"\\setminus":{font:"main",group:"bin",replace:"\u2216"},"\\land":{font:"main",group:"bin",replace:"\u2227"},"\\lor":{font:"main",group:"bin",replace:"\u2228"},"\\wedge":{font:"main",group:"bin",replace:"\u2227"},"\\vee":{font:"main",group:"bin",replace:"\u2228"},"\\surd":{font:"main",group:"textord",replace:"\u221a"},"(":{font:"main",group:"open"},"[":{font:"main",group:"open"},"\\langle":{font:"main",group:"open",replace:"\u27e8"},"\\lvert":{font:"main",group:"open",replace:"\u2223"},"\\lVert":{font:"main",group:"open",replace:"\u2225"},")":{font:"main",group:"close"},"]":{font:"main",group:"close"},"?":{font:"main",group:"close"},"!":{font:"main",group:"close"},"\\rangle":{font:"main",group:"close",replace:"\u27e9"},"\\rvert":{font:"main",group:"close",replace:"\u2223"},"\\rVert":{font:"main",group:"close",replace:"\u2225"},"=":{font:"main",group:"rel"},"<":{font:"main",group:"rel"},">":{font:"main",group:"rel"},":":{font:"main",group:"rel"},"\\approx":{font:"main",group:"rel",replace:"\u2248"},"\\cong":{font:"main",group:"rel",replace:"\u2245"},"\\ge":{font:"main",group:"rel",replace:"\u2265"},"\\geq":{font:"main",group:"rel",replace:"\u2265"},"\\gets":{font:"main",group:"rel",replace:"\u2190"},"\\in":{font:"main",group:"rel",replace:"\u2208"},"\\notin":{font:"main",group:"rel",replace:"\u2209"},"\\subset":{font:"main",group:"rel",replace:"\u2282"},"\\supset":{font:"main",group:"rel",replace:"\u2283"},"\\subseteq":{font:"main",group:"rel",replace:"\u2286"},"\\supseteq":{font:"main",group:"rel",replace:"\u2287"},"\\nsubseteq":{font:"ams",group:"rel",replace:"\u2288"},"\\nsupseteq":{font:"ams",group:"rel",replace:"\u2289"},"\\models":{font:"main",group:"rel",replace:"\u22a8"},"\\leftarrow":{font:"main",group:"rel",replace:"\u2190"},"\\le":{font:"main",group:"rel",replace:"\u2264"},"\\leq":{font:"main",group:"rel",replace:"\u2264"},"\\ne":{font:"main",group:"rel",replace:"\u2260"},"\\neq":{font:"main",group:"rel",replace:"\u2260"},"\\rightarrow":{font:"main",group:"rel",replace:"\u2192"},"\\to":{font:"main",group:"rel",replace:"\u2192"},"\\ngeq":{font:"ams",group:"rel",replace:"\u2271"},"\\nleq":{font:"ams",group:"rel",replace:"\u2270"},"\\!":{font:"main",group:"spacing"},"\\ ":{font:"main",group:"spacing",replace:"\xa0"},"~":{font:"main",group:"spacing",replace:"\xa0"},"\\,":{font:"main",group:"spacing"},"\\:":{font:"main",group:"spacing"},"\\;":{font:"main",group:"spacing"},"\\enspace":{font:"main",group:"spacing"},"\\qquad":{font:"main",group:"spacing"},"\\quad":{font:"main",group:"spacing"},"\\space":{font:"main",group:"spacing",replace:"\xa0"},",":{font:"main",group:"punct"},";":{font:"main",group:"punct"},"\\colon":{font:"main",group:"punct",replace:":"},"\\barwedge":{font:"ams",group:"bin",replace:"\u22bc"},"\\veebar":{font:"ams",group:"bin",replace:"\u22bb"},"\\odot":{font:"main",group:"bin",replace:"\u2299"},"\\oplus":{font:"main",group:"bin",replace:"\u2295"},"\\otimes":{font:"main",group:"bin",replace:"\u2297"},"\\partial":{font:"main",group:"textord",replace:"\u2202"},"\\oslash":{font:"main",group:"bin",replace:"\u2298"},"\\circledcirc":{font:"ams",group:"bin",replace:"\u229a"},"\\boxdot":{font:"ams",group:"bin",replace:"\u22a1"},"\\bigtriangleup":{font:"main",group:"bin",replace:"\u25b3"},"\\bigtriangledown":{font:"main",group:"bin",replace:"\u25bd"},"\\dagger":{font:"main",group:"bin",replace:"\u2020"},"\\diamond":{font:"main",group:"bin",replace:"\u22c4"},"\\star":{font:"main",group:"bin",replace:"\u22c6"},"\\triangleleft":{font:"main",group:"bin",replace:"\u25c3"},"\\triangleright":{font:"main",group:"bin",replace:"\u25b9"},"\\{":{font:"main",group:"open",replace:"{"},"\\}":{font:"main",group:"close",replace:"}"},"\\lbrace":{font:"main",group:"open",replace:"{"},"\\rbrace":{font:"main",group:"close",replace:"}"},"\\lbrack":{font:"main",group:"open",replace:"["},"\\rbrack":{font:"main",group:"close",replace:"]"},"\\lfloor":{font:"main",group:"open",replace:"\u230a"},"\\rfloor":{font:"main",group:"close",replace:"\u230b"},"\\lceil":{font:"main",group:"open",replace:"\u2308"},"\\rceil":{font:"main",group:"close",replace:"\u2309"},"\\backslash":{font:"main",group:"textord",replace:"\\"},"|":{font:"main",group:"textord",replace:"\u2223"},"\\vert":{font:"main",group:"textord",replace:"\u2223"},"\\|":{font:"main",group:"textord",replace:"\u2225"},"\\Vert":{font:"main",group:"textord",replace:"\u2225"},"\\uparrow":{font:"main",group:"rel",replace:"\u2191"},"\\Uparrow":{font:"main",group:"rel",replace:"\u21d1"},"\\downarrow":{font:"main",group:"rel",replace:"\u2193"},"\\Downarrow":{font:"main",group:"rel",replace:"\u21d3"},"\\updownarrow":{font:"main",group:"rel",replace:"\u2195"},"\\Updownarrow":{font:"main",group:"rel",replace:"\u21d5"},"\\coprod":{font:"math",group:"op",replace:"\u2210"},"\\bigvee":{font:"math",group:"op",replace:"\u22c1"},"\\bigwedge":{font:"math",group:"op",replace:"\u22c0"},"\\biguplus":{font:"math",group:"op",replace:"\u2a04"},"\\bigcap":{font:"math",group:"op",replace:"\u22c2"},"\\bigcup":{font:"math",group:"op",replace:"\u22c3"},"\\int":{font:"math",group:"op",replace:"\u222b"},"\\intop":{font:"math",group:"op",replace:"\u222b"},"\\iint":{font:"math",group:"op",replace:"\u222c"},"\\iiint":{font:"math",group:"op",replace:"\u222d"},"\\prod":{font:"math",group:"op",replace:"\u220f"},"\\sum":{font:"math",group:"op",replace:"\u2211"},"\\bigotimes":{font:"math",group:"op",replace:"\u2a02"},"\\bigoplus":{font:"math",group:"op",replace:"\u2a01"},"\\bigodot":{font:"math",group:"op",replace:"\u2a00"},"\\oint":{font:"math",group:"op",replace:"\u222e"},"\\bigsqcup":{font:"math",group:"op",replace:"\u2a06"},"\\smallint":{font:"math",group:"op",replace:"\u222b"},"\\ldots":{font:"main",group:"inner",replace:"\u2026"},"\\cdots":{font:"main",group:"inner",replace:"\u22ef"},"\\ddots":{font:"main",group:"inner",replace:"\u22f1"},"\\vdots":{font:"main",group:"textord",replace:"\u22ee"},"\\acute":{font:"main",group:"accent",replace:"\xb4"},"\\grave":{font:"main",group:"accent",replace:"`"},"\\ddot":{font:"main",group:"accent",replace:"\xa8"},"\\tilde":{font:"main",group:"accent",replace:"~"},"\\bar":{font:"main",group:"accent",replace:"\xaf"},"\\breve":{font:"main",group:"accent",replace:"\u02d8"},"\\check":{font:"main",group:"accent",replace:"\u02c7"},"\\hat":{font:"main",group:"accent",replace:"^"},"\\vec":{font:"main",group:"accent",replace:"\u20d7"},"\\dot":{font:"main",group:"accent",replace:"\u02d9"},"\\imath":{font:"main",group:"mathord",replace:"\u0131"},"\\jmath":{font:"main",group:"mathord",replace:"\u0237"}},text:{"\\ ":{font:"main",group:"spacing",replace:"\xa0"}," ":{font:"main",group:"spacing",replace:"\xa0"},"~":{font:"main",group:"spacing",replace:"\xa0"}}};var a='0123456789/@."';for(var r=0;r<a.length;r++){var l=a.charAt(r);h.math[l]={font:"main",group:"textord"}}var s="0123456789`!@*()-=+[]'\";:?/.,";for(var r=0;r<s.length;r++){var l=s.charAt(r);h.text[l]={font:"main",group:"textord"}}var p="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";for(var r=0;r<p.length;r++){var l=p.charAt(r);h.math[l]={font:"main",group:"mathord"};h.text[l]={font:"main",group:"textord"}}t.exports=h},{}],23:[function(e,t,i){var h=Array.prototype.indexOf;var a=function(e,t){if(e==null){return-1}if(h&&e.indexOf===h){return e.indexOf(t)}var i=0,a=e.length;for(;i<a;i++){if(e[i]===t){return i}}return-1};var r=function(e,t){return a(e,t)!==-1};var l=function(e,t){return e===undefined?t:e};var s=/([A-Z])/g;var p=function(e){return e.replace(s,"-$1").toLowerCase()};var c={"&":"&amp;",">":"&gt;","<":"&lt;",'"':"&quot;","'":"&#x27;"};var n=/[&><"']/g;function o(e){return c[e]}function g(e){return(""+e).replace(n,o)}var d;if(typeof document!=="undefined"){var w=document.createElement("span");if("textContent"in w){d=function(e,t){e.textContent=t}}else{d=function(e,t){e.innerText=t}}}function u(e){d(e,"")}t.exports={contains:r,deflt:l,escape:g,hyphenate:p,indexOf:a,setTextContent:d,clearNode:u}},{}]},{},[1])(1)});
 /**
  * @license
- * evalculist 0.2.0
+ * evalculist 0.2.2
  * Copyright 2017 Dan Allison <dan@calculist.io> and Calculist LLC <http://calculist.io>
  * Released under MIT license
  */
@@ -36379,6 +36379,7 @@ group:"textord",replace:"\u03a5"},"\\Phi":{font:"main",group:"textord",replace:"
   var compile = function (tokens, i) {
     var expressions = [];
     var t = tokens[i];
+    if (!t) return '';
     var pd = t[PAREN_DEPTH_INDEX];
     var sqd = t[SQUARE_DEPTH_INDEX];
     while (t && t[PAREN_DEPTH_INDEX] >= pd && t[SQUARE_DEPTH_INDEX] >= sqd) {
@@ -36474,7 +36475,7 @@ group:"textord",replace:"\u03a5"},"\\Phi":{font:"main",group:"textord",replace:"
             tokens.push([EXPRESSION_TOKEN, sqChunk, parenDepth, sqrBrktDepth]);
           }
         } else {
-          sqChunk.split(/(\(|\)|\[|\]|\.|\=|\;|(?:[a-zA-Z\d_\$]+))/g).forEach(function (token) {
+          sqChunk.split(/(\(|\)|\[|\]|\.|\={2,3}|\!\={1,2}|\=\>|\=|\;|(?:[a-zA-Z\d_\$]+))/g).forEach(function (token) {
             if (!token) return;
             if (/[a-zA-Z\d_\$]+/.test(token)) {
               if (isDigit(token[0])) {
@@ -36849,6 +36850,16 @@ calculist.register('removeHTML', [], function () {
   });
 
 })(this, _);
+calculist.register('wordWrap', [], function () {
+  // Adapted from https://github.com/jonschlinkert/word-wrap
+  return {
+    getLines: function(string, width) {
+      string || (string = '');
+      var reg = new RegExp('.{1,' + Math.floor(width) + '}([\\s\u200B]+|$)|[^\\s\u200B]+?([\\s\u200B]+|$)', 'g');
+      return string.match(reg) || [];
+    }
+  };
+});
 calculist.register('commands.changeFont',['_','$'], function (_, $) {
   return function (_this, fontName) {
     $(document.body).append(
@@ -38340,6 +38351,13 @@ calculist.register('createComputationContextObject', ['_','ss','evalculist','isI
     return _.uniq(items);
   };
 
+  proto.slice = function (items, start, end) {
+    items = itemsIfItem(items);
+    var result = _.slice(items, start, end);
+    if (_.isString(items)) return result.join('');
+    return result;
+  };
+
   var doubleIterators = ['difference','intersection','union','xor','zip'];
 
   _.each(doubleIterators, function (methodName) {
@@ -39077,6 +39095,11 @@ calculist.require(['Item','removeHTML','_'], function (Item, removeHTML, _) {
   };
 
 });
+calculist.register('item.getInputLines', ['wordWrap'], function (wordWrap) {
+  return function () {
+    return wordWrap.getLines(this.text, this.getLineWidthInCharacters());
+  };
+});
 calculist.register('item.getLineCount', [], function () {
 
   return function () {
@@ -39090,15 +39113,28 @@ calculist.register('item.getLineCount', [], function () {
   };
 
 });
-calculist.register('item.getLineWidthInCharacters', ['_'], function (_) {
+calculist.register('item.getLineWidthInCharacters', ['zoomPage'], function (zoomPage) {
 
-  var CHAR_WIDTH = 8, PADDING = 8, FUDGE = 32;
+  var FONT_SIZE = 16, TOP_ITEM_FONT_SIZE = 32;
+
+  var ruler = $('<span style="visibility: hidden;white-space:nowrap;"></span>');
+
+  $('#main-container').append(ruler);
+
+  var getCharWidth = function (text, isTopLevel) {
+    // FIXME
+    return isTopLevel ? 16 : 8;
+    // text || (text = '.'); // Need at least one character
+    // ruler.css({
+    //   fontSize: isTopLevel ? TOP_ITEM_FONT_SIZE : FONT_SIZE
+    // }).text(text);
+    // return ruler.width() / text.length;
+  }
 
   return function () {
-    this.$input || (this.$input = this.$('#input' + this.id));
-    var inputWidth = this.$input.width(),
-        isTopLevel = sessionStorage.zoomGuid === this.guid || !this.parent,
-        charWidth = isTopLevel ? (CHAR_WIDTH * 2) : CHAR_WIDTH,
+    var $input = this.$('#input' + this.id);
+    var inputWidth = $input.width(),
+        charWidth = getCharWidth(this.text, zoomPage.isTopOfAPage(this)),
         widthInCharacters = inputWidth / charWidth;
 
     return widthInCharacters;
@@ -39302,12 +39338,16 @@ calculist.register('item.handleKeydown', ['_','$','customKeyboardShortcuts','cur
         this.up(true, true);
       } else {
         (function () {
-          var lineWidth = Math.max(this.getLineWidthInCharacters(), 1),
-              lineCount = Math.ceil(this.text.length / lineWidth),
+          var lines = this.getInputLines(),
+              lineCount = lines.length,
               currentCursorPosition = cursorPosition.getWithCurrentOffset(this.text, this.depth),
-              currentLine = Math.floor(currentCursorPosition / (lineWidth || Infinity));
-          // console.log('up', lineWidth, lineCount, currentCursorPosition, currentLine);
-          if (true || currentLine === 0 || lineCount <= 1) {
+              currentLine = lines.reduce(function (cl, line, i) {
+                cl.charCount += line.length;
+                if (cl.index == null && currentCursorPosition < cl.charCount) cl.index = i;
+                return cl;
+              }, {charCount: 0, index: null}).index;
+          if (currentLine == null) currentLine = lineCount - 1;
+          if (currentLine === 0 || lineCount <= 1) {
             e.preventDefault();
             this.up();
           }
@@ -39322,12 +39362,20 @@ calculist.register('item.handleKeydown', ['_','$','customKeyboardShortcuts','cur
         this.down(true, true);
       } else {
         (function () {
-          var lineWidth = this.getLineWidthInCharacters(),
-              lineCount = Math.ceil(this.text.length / lineWidth),
+          var lines = this.getInputLines(),
+              lineCount = lines.length,
               currentCursorPosition = cursorPosition.getWithCurrentOffset(this.text, this.depth),
-              currentLine = Math.floor(currentCursorPosition / (lineWidth || Infinity));
-          // console.log('down', lineWidth, lineCount, currentCursorPosition, currentLine);
-          if (true || currentLine >= (lineCount - 1) || lineCount <= 1 || currentCursorPosition >= this.text.length) {
+              currentLine = lines.reduce(function (cl, line, i) {
+                cl.charCount += line.length;
+                if (cl.index == null && currentCursorPosition < cl.charCount) cl.index = i;
+                return cl;
+              }, {charCount: 0, index: null}).index;
+          if (currentLine == null) currentLine = lineCount - 1;
+          if (currentLine >= (lineCount - 1) || lineCount <= 1 || currentCursorPosition >= this.text.length) {
+            if (lineCount > 1) {
+              var adjustedCursorPosition = currentCursorPosition - (this.text.length - lines[lineCount - 1].length);
+              cursorPosition.set(lines[lineCount - 1], this.depth, adjustedCursorPosition);
+            }
             e.preventDefault();
             this.down();
           }
@@ -39336,6 +39384,7 @@ calculist.register('item.handleKeydown', ['_','$','customKeyboardShortcuts','cur
     } else if (e.which === 8) { // 8 = delete
       if (!this.text) {
         e.preventDefault();
+        cursorPosition.set('', 1, Infinity);
         transaction(this.deleteItem, this);
       } else if (e.altKey && anchorOffset === 0) {
         e.preventDefault();
@@ -39606,13 +39655,6 @@ calculist.require(['Item','_','parseTextDoc','getNewGuid','transaction','cursorP
     }, this);
 
     // console.log(selection, text);
-  };
-
-});
-calculist.require(['Item','_'], function (Item, _) {
-
-  Item.prototype.isMultiline = function () {
-    // window.$input = this.$('.input');
   };
 
 });
@@ -40162,12 +40204,10 @@ calculist.require(['Item','_','getNewGuid'], function (Item, _, getNewGuid) {
   };
 
 });
-calculist.register('item.up', ['_','lmSessionStorage'], function (_, lmSessionStorage) {
+calculist.register('item.up', ['_','zoomPage','cursorPosition'], function (_, zoomPage, cursorPosition) {
 
   return function(skipChildren, maintainDepth) {
-    if (!this.parent) return;
-    if (lmSessionStorage.get('zoomGuid') === this.guid) return;
-    if (this.isMultiline() && !this.onTopLine()) return;
+    if (zoomPage.isTopOfAPage(this)) return;
     var nextUp;
     if (maintainDepth) {
       nextUp = this.parent.getUpperItemAtDepth(this, this.depth);
@@ -40183,10 +40223,21 @@ calculist.register('item.up', ['_','lmSessionStorage'], function (_, lmSessionSt
       }
     }
     if (nextUp && nextUp.isWithinZoom()) {
-      nextUp.focus();
+      // nextUp = nextUp
     } else if (this.parent && !maintainDepth) {
-      this.parent.focus();
+      nextUp = this.parent;
+    } else {
+      return;
     }
+    var nextUpLines = nextUp.getInputLines();
+    if (nextUpLines.length > 1) {
+      var lastLine = nextUpLines.pop(); // Remove last line
+      var otherLinesLength = nextUpLines.reduce(function (sum, line) { return sum + line.length; }, 0);
+      var currentCursorPosition = cursorPosition.get(this.depth);
+      var adjustedCursorPosition = currentCursorPosition + otherLinesLength;
+      cursorPosition.set(nextUp.text, nextUp.depth, adjustedCursorPosition);
+    }
+    nextUp.focus();
   };
 
 });
@@ -40388,10 +40439,12 @@ calculist.register('itemOfDrag', ['transaction','$'], function (transaction, $) 
   }
 })
 ;
-calculist.register('itemOfFocus', ['eventHub'], function (eventHub) {
+calculist.register('itemOfFocus', ['eventHub','itemOfDrag'], function (eventHub, itemOfDrag) {
   var itemOfFocus;
   return {
     change: function (item) {
+      var dragItem = itemOfDrag.get();
+      if (dragItem) item = dragItem;
       if (item === itemOfFocus) return;
       eventHub.trigger('itemOfFocusChange:before', itemOfFocus);
       itemOfFocus = item;
@@ -40400,8 +40453,7 @@ calculist.register('itemOfFocus', ['eventHub'], function (eventHub) {
     get: function () { return itemOfFocus; },
     is: function (item) { return item === itemOfFocus; }
   }
-})
-;
+});
 calculist.register('itemsByGuid', [], function () {
   return {};
 });
@@ -41336,10 +41388,11 @@ calculist.register('cursorPosition', ['_'], function (_) {
 
   var DEPTH_UNIT = 5;
 
+  var previousCursorPosition = 0;
   var cursorPosition = 0;
 
   var calculateCursorPosition = function (text, depth, position) {
-    return text.length === position ? Infinity : (depth - 1) * DEPTH_UNIT + position;
+    return (depth - 1) * DEPTH_UNIT + position;
   };
 
   var cursorPositionMinusDepth = function (depth, position) {
@@ -41357,10 +41410,14 @@ calculist.register('cursorPosition', ['_'], function (_) {
       //     extentOffset = selection.extentOffset,
       //     focusOffset = selection.focusOffset,
       //     rangeCount = selection.rangeCount;
+      previousCursorPosition = cursorPosition;
       cursorPosition = calculateCursorPosition(text, depth, offset);
     },
     get: function (depth) {
       return Math.max(0, cursorPositionMinusDepth(depth));
+    },
+    getPrevious: function (depth) {
+      return Math.max(0, cursorPositionMinusDepth(depth, previousCursorPosition));
     },
     getWithCurrentOffset: function (text, depth) {
       return Math.max(0, cursorPositionMinusDepth(depth, calculateCursorPosition(text, depth, document.getSelection().baseOffset)));
