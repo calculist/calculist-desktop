@@ -336,17 +336,6 @@ body {
   padding: 0;
 }
 /* line 169, ~/app.calculist.io/app/assets/stylesheets/style.css.scss */
-#main-container #export-display {
-  display: none;
-  background-color: white;
-  color: #000;
-  position: absolute;
-  width: 50%;
-  min-height: 1200px;
-  top: 20px;
-  left: 25%;
-}
-/* line 179, ~/app.calculist.io/app/assets/stylesheets/style.css.scss */
 #main-container #command-typeahead-menu {
   margin: 0;
   padding: 4px;
@@ -356,28 +345,28 @@ body {
   background-color: #000;
   color: #fff;
 }
-/* line 189, ~/app.calculist.io/app/assets/stylesheets/style.css.scss */
+/* line 179, ~/app.calculist.io/app/assets/stylesheets/style.css.scss */
 #main-container #sign-out {
   cursor: pointer;
 }
-/* line 192, ~/app.calculist.io/app/assets/stylesheets/style.css.scss */
+/* line 182, ~/app.calculist.io/app/assets/stylesheets/style.css.scss */
 #main-container .computed-display {
   position: absolute;
   margin-top: 3px;
   color: deepskyblue;
 }
-/* line 197, ~/app.calculist.io/app/assets/stylesheets/style.css.scss */
+/* line 187, ~/app.calculist.io/app/assets/stylesheets/style.css.scss */
 #main-container .computed-display.error {
   color: #ff0505;
 }
-/* line 201, ~/app.calculist.io/app/assets/stylesheets/style.css.scss */
+/* line 191, ~/app.calculist.io/app/assets/stylesheets/style.css.scss */
 #main-container .dot {
   cursor: pointer;
   display: inline-block;
   width: auto;
   float: left;
 }
-/* line 206, ~/app.calculist.io/app/assets/stylesheets/style.css.scss */
+/* line 196, ~/app.calculist.io/app/assets/stylesheets/style.css.scss */
 #main-container .dot:after {
   content: "";
   display: inline-block;
@@ -389,17 +378,17 @@ body {
   float: left;
   background: none;
 }
-/* line 217, ~/app.calculist.io/app/assets/stylesheets/style.css.scss */
+/* line 207, ~/app.calculist.io/app/assets/stylesheets/style.css.scss */
 #main-container .dot.collapsed:after {
   border-color: transparent;
   background: #000;
 }
-/* line 221, ~/app.calculist.io/app/assets/stylesheets/style.css.scss */
+/* line 211, ~/app.calculist.io/app/assets/stylesheets/style.css.scss */
 #main-container .dot.top-level {
   opacity: 0;
   cursor: default;
 }
-/* line 226, ~/app.calculist.io/app/assets/stylesheets/style.css.scss */
+/* line 216, ~/app.calculist.io/app/assets/stylesheets/style.css.scss */
 #main-container .input {
   transition: font-size 100ms;
   overflow: hidden;
@@ -417,215 +406,200 @@ body {
   white-space: normal;
   vertical-align: middle;
 }
-/* line 243, ~/app.calculist.io/app/assets/stylesheets/style.css.scss */
+/* line 233, ~/app.calculist.io/app/assets/stylesheets/style.css.scss */
 #main-container .input:focus, #main-container .input.focus {
   color: white;
   background-color: black;
   outline: 1px solid rgba(0, 0, 0, 0.4);
 }
-/* line 249, ~/app.calculist.io/app/assets/stylesheets/style.css.scss */
+/* line 239, ~/app.calculist.io/app/assets/stylesheets/style.css.scss */
 #main-container .input.command:focus, #main-container .input.command.focus {
   background-color: white;
   color: black;
   outline: 1px solid deepskyblue;
 }
-/* line 254, ~/app.calculist.io/app/assets/stylesheets/style.css.scss */
+/* line 244, ~/app.calculist.io/app/assets/stylesheets/style.css.scss */
 #main-container .input.command.warning:focus, #main-container .input.command.warning.focus {
   background-color: red;
   color: black;
 }
-/* line 258, ~/app.calculist.io/app/assets/stylesheets/style.css.scss */
+/* line 248, ~/app.calculist.io/app/assets/stylesheets/style.css.scss */
 #main-container .input.top-level {
   font-size: 32px;
   list-style-type: none;
   transition: font-size 100ms cubic-bezier(0.445, 0.05, 0.55, 0.95);
 }
-/* line 264, ~/app.calculist.io/app/assets/stylesheets/style.css.scss */
+/* line 254, ~/app.calculist.io/app/assets/stylesheets/style.css.scss */
 #main-container .input.special-item {
   text-shadow: 0px 0px 1px deepskyblue;
 }
-/* line 266, ~/app.calculist.io/app/assets/stylesheets/style.css.scss */
+/* line 256, ~/app.calculist.io/app/assets/stylesheets/style.css.scss */
 #main-container .input.special-item span.value {
   text-shadow: none;
 }
-/* line 275, ~/app.calculist.io/app/assets/stylesheets/style.css.scss */
+/* line 265, ~/app.calculist.io/app/assets/stylesheets/style.css.scss */
 #main-container .input span.value {
   color: deepskyblue;
 }
-/* line 278, ~/app.calculist.io/app/assets/stylesheets/style.css.scss */
+/* line 268, ~/app.calculist.io/app/assets/stylesheets/style.css.scss */
 #main-container .input span.value.error {
   color: #ff0505;
 }
-/* line 284, ~/app.calculist.io/app/assets/stylesheets/style.css.scss */
+/* line 274, ~/app.calculist.io/app/assets/stylesheets/style.css.scss */
 #main-container .input code .hljs-string {
   color: deepskyblue;
 }
-/* line 287, ~/app.calculist.io/app/assets/stylesheets/style.css.scss */
+/* line 277, ~/app.calculist.io/app/assets/stylesheets/style.css.scss */
 #main-container .input code .hljs-number {
   color: deepskyblue;
 }
-/* line 292, ~/app.calculist.io/app/assets/stylesheets/style.css.scss */
+/* line 282, ~/app.calculist.io/app/assets/stylesheets/style.css.scss */
 #main-container.theme-dark {
   background-color: #333;
   color: #eee;
 }
-/* line 298, ~/app.calculist.io/app/assets/stylesheets/style.css.scss */
+/* line 288, ~/app.calculist.io/app/assets/stylesheets/style.css.scss */
 #main-container.theme-dark a {
   color: #eee;
 }
-/* line 301, ~/app.calculist.io/app/assets/stylesheets/style.css.scss */
+/* line 291, ~/app.calculist.io/app/assets/stylesheets/style.css.scss */
 #main-container.theme-dark .page {
   background-color: #242424;
 }
-/* line 304, ~/app.calculist.io/app/assets/stylesheets/style.css.scss */
-#main-container.theme-dark #export-display {
-  background-color: white;
-  color: #000;
-}
-/* line 308, ~/app.calculist.io/app/assets/stylesheets/style.css.scss */
+/* line 294, ~/app.calculist.io/app/assets/stylesheets/style.css.scss */
 #main-container.theme-dark ul {
   border-left: 1px solid rgba(255, 255, 255, 0.09);
 }
-/* line 310, ~/app.calculist.io/app/assets/stylesheets/style.css.scss */
+/* line 296, ~/app.calculist.io/app/assets/stylesheets/style.css.scss */
 #main-container.theme-dark ul.top-level {
   border-left: none;
 }
-/* line 314, ~/app.calculist.io/app/assets/stylesheets/style.css.scss */
+/* line 300, ~/app.calculist.io/app/assets/stylesheets/style.css.scss */
 #main-container.theme-dark li {
   color: rgba(255, 255, 255, 0.5);
 }
-/* line 316, ~/app.calculist.io/app/assets/stylesheets/style.css.scss */
+/* line 302, ~/app.calculist.io/app/assets/stylesheets/style.css.scss */
 #main-container.theme-dark li.collapsed {
   color: white;
 }
-/* line 319, ~/app.calculist.io/app/assets/stylesheets/style.css.scss */
+/* line 305, ~/app.calculist.io/app/assets/stylesheets/style.css.scss */
 #main-container.theme-dark li.dragging {
   background: #242424;
 }
-/* line 322, ~/app.calculist.io/app/assets/stylesheets/style.css.scss */
+/* line 308, ~/app.calculist.io/app/assets/stylesheets/style.css.scss */
 #main-container.theme-dark li.dragging-standin {
   background: rgba(255, 255, 255, 0.1);
 }
-/* line 326, ~/app.calculist.io/app/assets/stylesheets/style.css.scss */
+/* line 312, ~/app.calculist.io/app/assets/stylesheets/style.css.scss */
 #main-container.theme-dark .input {
   color: rgba(255, 255, 255, 0.5);
   background-color: transparent;
 }
-/* line 329, ~/app.calculist.io/app/assets/stylesheets/style.css.scss */
+/* line 315, ~/app.calculist.io/app/assets/stylesheets/style.css.scss */
 #main-container.theme-dark .input:focus, #main-container.theme-dark .input.focus {
   color: white;
   background-color: black;
 }
-/* line 333, ~/app.calculist.io/app/assets/stylesheets/style.css.scss */
+/* line 319, ~/app.calculist.io/app/assets/stylesheets/style.css.scss */
 #main-container.theme-dark .input.command:focus {
   background-color: white;
   color: black;
 }
-/* line 337, ~/app.calculist.io/app/assets/stylesheets/style.css.scss */
+/* line 323, ~/app.calculist.io/app/assets/stylesheets/style.css.scss */
 #main-container.theme-dark .input.command.warning:focus {
   background-color: red;
   color: black;
 }
-/* line 343, ~/app.calculist.io/app/assets/stylesheets/style.css.scss */
+/* line 329, ~/app.calculist.io/app/assets/stylesheets/style.css.scss */
 #main-container.theme-dark .dot.collapsed:after {
   background: rgba(255, 255, 255, 0.8);
 }
-/* line 348, ~/app.calculist.io/app/assets/stylesheets/style.css.scss */
+/* line 334, ~/app.calculist.io/app/assets/stylesheets/style.css.scss */
 #main-container.theme-light {
   background-color: #eee;
   color: #333;
 }
-/* line 351, ~/app.calculist.io/app/assets/stylesheets/style.css.scss */
+/* line 337, ~/app.calculist.io/app/assets/stylesheets/style.css.scss */
 #main-container.theme-light a {
   color: #333;
 }
-/* line 357, ~/app.calculist.io/app/assets/stylesheets/style.css.scss */
+/* line 343, ~/app.calculist.io/app/assets/stylesheets/style.css.scss */
 #main-container.theme-light .page {
   background-color: #fff;
 }
-/* line 360, ~/app.calculist.io/app/assets/stylesheets/style.css.scss */
-#main-container.theme-light #export-display {
-  background-color: #fff;
-  color: #000;
-}
-/* line 364, ~/app.calculist.io/app/assets/stylesheets/style.css.scss */
+/* line 346, ~/app.calculist.io/app/assets/stylesheets/style.css.scss */
 #main-container.theme-light li {
   color: rgba(0, 0, 0, 0.5);
 }
-/* line 366, ~/app.calculist.io/app/assets/stylesheets/style.css.scss */
+/* line 348, ~/app.calculist.io/app/assets/stylesheets/style.css.scss */
 #main-container.theme-light li.collapsed {
   color: black;
 }
-/* line 369, ~/app.calculist.io/app/assets/stylesheets/style.css.scss */
+/* line 351, ~/app.calculist.io/app/assets/stylesheets/style.css.scss */
 #main-container.theme-light li.dragging {
   background: #fff;
 }
-/* line 373, ~/app.calculist.io/app/assets/stylesheets/style.css.scss */
+/* line 355, ~/app.calculist.io/app/assets/stylesheets/style.css.scss */
 #main-container.theme-light .input {
   background-color: rgba(255, 255, 255, 0);
   color: #0a0a0a;
 }
-/* line 376, ~/app.calculist.io/app/assets/stylesheets/style.css.scss */
+/* line 358, ~/app.calculist.io/app/assets/stylesheets/style.css.scss */
 #main-container.theme-light .input:focus, #main-container.theme-light .input.focus {
   background-color: white;
   color: black;
 }
-/* line 380, ~/app.calculist.io/app/assets/stylesheets/style.css.scss */
+/* line 362, ~/app.calculist.io/app/assets/stylesheets/style.css.scss */
 #main-container.theme-light .input.command:focus {
   color: white;
   background-color: black;
 }
-/* line 384, ~/app.calculist.io/app/assets/stylesheets/style.css.scss */
+/* line 366, ~/app.calculist.io/app/assets/stylesheets/style.css.scss */
 #main-container.theme-light .input.command.warning:focus {
   color: red;
   background-color: black;
 }
-/* line 390, ~/app.calculist.io/app/assets/stylesheets/style.css.scss */
+/* line 372, ~/app.calculist.io/app/assets/stylesheets/style.css.scss */
 #main-container.theme-sandcastle {
   background-color: #eed;
   color: #333;
 }
-/* line 393, ~/app.calculist.io/app/assets/stylesheets/style.css.scss */
+/* line 375, ~/app.calculist.io/app/assets/stylesheets/style.css.scss */
 #main-container.theme-sandcastle a {
   color: #333;
 }
-/* line 399, ~/app.calculist.io/app/assets/stylesheets/style.css.scss */
+/* line 381, ~/app.calculist.io/app/assets/stylesheets/style.css.scss */
 #main-container.theme-sandcastle .page {
   background-color: #fbfbf8;
 }
-/* line 402, ~/app.calculist.io/app/assets/stylesheets/style.css.scss */
-#main-container.theme-sandcastle #export-display {
-  background-color: white;
-  color: #000;
-}
-/* line 406, ~/app.calculist.io/app/assets/stylesheets/style.css.scss */
+/* line 384, ~/app.calculist.io/app/assets/stylesheets/style.css.scss */
 #main-container.theme-sandcastle li {
   color: rgba(0, 0, 0, 0.5);
 }
-/* line 408, ~/app.calculist.io/app/assets/stylesheets/style.css.scss */
+/* line 386, ~/app.calculist.io/app/assets/stylesheets/style.css.scss */
 #main-container.theme-sandcastle li.collapsed {
   color: black;
 }
-/* line 411, ~/app.calculist.io/app/assets/stylesheets/style.css.scss */
+/* line 389, ~/app.calculist.io/app/assets/stylesheets/style.css.scss */
 #main-container.theme-sandcastle li.dragging {
   background: #fbfbf8;
 }
-/* line 415, ~/app.calculist.io/app/assets/stylesheets/style.css.scss */
+/* line 393, ~/app.calculist.io/app/assets/stylesheets/style.css.scss */
 #main-container.theme-sandcastle .input {
   background-color: rgba(255, 255, 255, 0);
   color: #0a0a0a;
 }
-/* line 418, ~/app.calculist.io/app/assets/stylesheets/style.css.scss */
+/* line 396, ~/app.calculist.io/app/assets/stylesheets/style.css.scss */
 #main-container.theme-sandcastle .input:focus, #main-container.theme-sandcastle .input.focus {
   background-color: white;
   color: black;
 }
-/* line 422, ~/app.calculist.io/app/assets/stylesheets/style.css.scss */
+/* line 400, ~/app.calculist.io/app/assets/stylesheets/style.css.scss */
 #main-container.theme-sandcastle .input.command:focus {
   color: white;
   background-color: black;
 }
-/* line 426, ~/app.calculist.io/app/assets/stylesheets/style.css.scss */
+/* line 404, ~/app.calculist.io/app/assets/stylesheets/style.css.scss */
 #main-container.theme-sandcastle .input.command.warning:focus {
   color: red;
   background-color: black;

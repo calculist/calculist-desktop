@@ -36987,9 +36987,7 @@ calculist.require(['_','$','transaction','computeItemValue','cursorPosition','co
     addText: function (_this, text) {
       if (itemOfFocus.is(_this)) {
         var cursorIndex = cursorPosition.get(_this.depth);
-        if (_this.mode !== 'command' && (cursorIndex >= _this.text.length || !(cursorIndex >= 0))) {
-          _this.text += text;
-        } else if (_this.mode === 'command') {
+        if (_this.mode === 'command') {
           var $input = _this.$('#input' + _this.id);
           var textArray = _.toArray($input.text());
           textArray.splice(cursorIndex, 0, text);
@@ -37264,50 +37262,6 @@ calculist.require(['_','$','transaction','computeItemValue','cursorPosition','co
     copyToClipboardAsMarkdown: function (_this) {
       copyToClipboard(_this.toMarkdown(0)).then(function () {
         _this.focus();
-      });
-    },
-    exportItemsAsText: function (_this, options) {
-      var computed, hideCollapsed;
-      if (options == null) {
-        options = {};
-      }
-      computed = options.computed, hideCollapsed = options.hideCollapsed;
-      var text = _.map(_this.items, _.method('toText', 0, computed, hideCollapsed)).join('');
-      $('#export-display')
-        .val(text)
-        .show();
-
-      _.defer(function () {
-        $('#export-display').focus().select();
-      });
-    },
-    exportAsMarkdown: function(_this, options) {
-      var computed, hideCollapsed;
-      if (options == null) {
-        options = {};
-      }
-      computed = options.computed, hideCollapsed = options.hideCollapsed;
-      $('#export-display')
-        .val(_this.toMarkdown(0, computed, hideCollapsed))
-        .show();
-
-      _.defer(function () {
-        $('#export-display').focus().select();
-      });
-    },
-    exportItemsAsMarkdown: function (_this, options) {
-      var computed, hideCollapsed;
-      if (options == null) {
-        options = {};
-      }
-      computed = options.computed, hideCollapsed = options.hideCollapsed;
-      var text = _.map(_this.items, _.method('toMarkdown', 0, computed, hideCollapsed)).join('\n');
-      $('#export-display')
-        .val(text)
-        .show();
-
-      _.defer(function () {
-        $('#export-display').focus().select();
       });
     },
     downloadAsCsv: function (_this) {
@@ -41168,38 +41122,6 @@ calculist.register('userPreferences',['_','Item','parseTextDoc','getNewGuid'], f
   return userPreferences;
 
 });
-// calculist.register('commandCenter', ['_', '$'], function (_, $) {
-//   var input = $('#command-center');
-
-//   var commands = [
-//     'new list',
-//     'open list',
-//     // 'share list (coming soon)',
-//     'view settings',
-//   ];
-
-//   input.typeahead({ highlight: true, minLength: 0 }, {
-//     name: 'global-commands',
-//     source: function (query, results) {
-//       results(query === '.' ? commands : _.filter(commands, function (command) {
-//         return _.includes(command, query);
-//       }));
-//     }
-//   // },{
-//   //   name: 'list-commands',
-//   //   source: function (query, results) {
-//   //     results(query === '.' ? commands : _.filter(commands, function (command) {
-//   //       return _.includes(command, query);
-//   //     }));
-//   //   }
-//   });
-
-//   return {
-//     focus: function () {
-//       input.focus();
-//     }
-//   };
-// });
 calculist.register('commandTypeahead', ['_','eventHub'], function (_, eventHub) {
 
   var UP = 38, DOWN = 40;
@@ -41423,46 +41345,6 @@ calculist.register('cursorPosition', ['_'], function (_) {
       return Math.max(0, cursorPositionMinusDepth(depth, calculateCursorPosition(text, depth, document.getSelection().baseOffset)));
     }
   };
-
-});
-// calculist.register('defaultKeyboardShortcuts', [], function () {
-//   return {
-//     'ctrl + ~':                 'enter command mode',
-//     'ctrl + spacebar':          'toggle collapse',
-//     'ctrl + right':             'zoom in',
-//     'ctrl + left':              'zoom out',
-//     'ctrl + shift + spacebar':  'toggle collapse siblings',
-//     'ctrl + up':                'collapse all',
-//     'ctrl + down':              'expand all',
-//     'ctrl + shift + delete':    'delete',
-//     'ctrl + shift + d':         'duplicate',
-//     'ctrl + shift + up':        'move up',
-//     'ctrl + shift + down':      'move down',
-//     'ctrl + shift + right':     'indent',
-//     'ctrl + shift + left':      'outdent',
-//     'tab':                      'indent',
-//     'shift + tab':              'outdent',
-//     'alt + =':                  'add text "[=]"'
-//   };
-// });
-calculist.register('exportDisplay', ['_','$'], function (_, $) {
-
-    var $el = $('#export-display');
-    $el.on('keydown', function (e) {
-
-      var ESC = 27;
-      if (e.which === ESC) $el.hide();
-
-    });
-
-    return {
-      show: function (text) {
-        $el.text(text).show() ;
-      },
-      hide: function () {
-        $el.hide();
-      }
-    };
 
 });
 calculist.register('saveButton', ['_','$'], function (_, $) {
