@@ -36709,7 +36709,7 @@ calculist.register('calculistFileFormatter', ['_', 'parseTextDoc'], function (_,
 
   return {
     toCalculistFile: function (topItem) {
-      return topItem.toText(0, {computed: false, prependGuid: true});
+      return JSON.stringify(topItem, null, ' ');
     },
     parseFile: function (fileString) {
       return parseTextDoc(fileString, {withGuids: true});
@@ -36923,7 +36923,7 @@ calculist.register('commands.gotoList', ['_'], function (_) {
     }
   };
 });
-calculist.require(['_','$','transaction','computeItemValue','cursorPosition','commandTypeahead','getNewGuid','copyToClipboard','downloadFile','isItem','userPreferences','undoManager','jsonToItemTree','importFile','urlFinder','Item','itemOfFocus'], function (_, $, transaction, computeItemValue, cursorPosition, commandTypeahead, getNewGuid, copyToClipboard, downloadFile, isItem, userPreferences, undoManager, jsonToItemTree, importFile, urlFinder, Item, itemOfFocus) {
+calculist.require(['_','$','transaction','computeItemValue','cursorPosition','commandTypeahead','getNewGuid','copyToClipboard','downloadFile','isItem','userPreferences','undoManager','jsonToItemTree','importFile','urlFinder','Item','itemOfFocus','zoomPage'], function (_, $, transaction, computeItemValue, cursorPosition, commandTypeahead, getNewGuid, copyToClipboard, downloadFile, isItem, userPreferences, undoManager, jsonToItemTree, importFile, urlFinder, Item, itemOfFocus, zoomPage) {
 
   var commands = {
     hideHeader: function (_this) {
@@ -37098,7 +37098,7 @@ calculist.require(['_','$','transaction','computeItemValue','cursorPosition','co
     },
     newItem: function (_this) {
       var parent = _this.parent;
-      if (parent) {
+      if (parent && _this !== zoomPage.getTopItem()) {
         parent.addNewChildAfter(_this, "");
       } else {
         _this.addNewChildBefore(_this.items[0], "");
@@ -38051,7 +38051,19 @@ calculist.register('createComputationContextObject', ['_','ss','evalculist','isI
     proto[methodName] = _.flow(valIfItem, _[methodName]);
   });
 
-  proto.THIS_YEAR = (new Date()).getFullYear();
+  proto.PLACEHOLDER = { toString: _.constant('[PLACEHOLDER]') };
+
+  proto.partial = _.rest(function (fn, partialArgs) {
+    var partialFn = _.rest(function (args) {
+      var finalArgs = partialArgs.map(function (pArg) {
+        if (pArg === proto.PLACEHOLDER) return args.shift();
+        return pArg;
+      }).concat(args);
+      return fn.apply(null, finalArgs);
+    });
+    partialFn.toString = fnToString;
+    return partialFn;
+  });
 
   proto.average = proto.mean = function (items, defaultValue) {
     return proto.sum(items, defaultValue) / items.length;
@@ -40034,10 +40046,10 @@ calculist.require(['Item','_','getNewGuid'], function (Item, _, getNewGuid) {
   var toJSON = function(mapper) {
     return {
       text: this.text,
-      items: _.map(this.items, mapper),
       collapsed: !!this.collapsed,
       sort_order: this.sort_order,
-      guid: this.guid
+      guid: this.guid,
+      items: _.map(this.items, mapper),
     };
   };
 
@@ -41604,13 +41616,24 @@ calculist.init(['LIST_DATA','Item','_','$','Backbone','lmDiff','saveButton','get
         console.log(filePath)
         _.defer(function () {
           var fs = require('fs');
-          window.topItem.handlePaste(fs.readFileSync(filePath, 'utf8'), {isCalculistFile: _.endsWith(filePath, '.calculist') });
-          var markAsCollapsed = function (item) {
-            if (item.items.length) {
-              item.collapsed = item.parent && true;
-              _.each(item.items, markAsCollapsed);
-            }
-          };
+          var isCalculistFile = _.endsWith(filePath, '.calculist');
+          var file = fs.readFileSync(filePath, 'utf8');
+          var markAsCollapsed;
+          try {
+            var fileData = JSON.parse(file);
+            window.topItem.initialize(fileData);
+            markAsCollapsed = _.noop;
+          } catch (e) {
+            // NOTE If JSON.parse fails, we assume the deprecated format.
+            // This will be removed in future versions.
+            window.topItem.handlePaste(file, {isCalculistFile: isCalculistFile });
+            markAsCollapsed = function (item) {
+              if (item.items.length) {
+                item.collapsed = item.parent && true;
+                _.each(item.items, markAsCollapsed);
+              }
+            };
+          }
           markAsCollapsed(window.topItem);
           window.topItem.render();
           window.topItem.focus();
