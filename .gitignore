@@ -1,1 +1,3 @@
 node_modules/*
+dist/linux*
+dist/mac*
