@@ -1,23 +1,53 @@
 {
   "name": "CalculistDesktop",
   "productName": "Calculist",
-  "version": "0.1.0-beta",
+  "version": "0.1.0",
+  "license": "MIT",
   "description": "Desktop version of Calculist.io",
-  "private": true,
   "main": "./main.js",
-  "build": {},
+  "build": {
+    "appId": "org.calculist.Calculist",
+    "dmg": {
+      "contents": [
+        {
+          "x": 130,
+          "y": 220
+        },
+        {
+          "x": 410,
+          "y": 220,
+          "type": "link",
+          "path": "/Applications"
+        }
+      ]
+    },
+    "win": {
+      "target": "nsis",
+      "icon": "build/icon.ico"
+    },
+    "linux": {
+      "target": [
+        "AppImage",
+        "deb"
+      ]
+    }
+  },
   "scripts": {
     "start": "electron .",
     "dev": "electron . --debug",
-    "build": "electron-packager . Calculist && cp icon.icns Calculist-darwin-x64/Calculist.app/Contents/Resources/electron.icns"
+    "dist": "build"
   },
-  "author": "Dan Allison and Calculist LLC",
+  "author": {
+    "name": "Dan Allison",
+    "email": "dan@calculist.io",
+    "url": "https://calculist.io"
+  },
   "dependencies": {
     "lodash": "4.11.2"
   },
   "devDependencies": {
     "electron": "^1.3.5",
-    "electron-packager": "^8.3.0",
-    "electron-winstaller": "^2.2.0"
+    "electron-winstaller": "^2.2.0",
+    "electron-builder": "^17.5.0"
   }
 }
