@@ -97,7 +97,7 @@ app.on('ready', function () {
               focusedWindow.webContents.send('save', focusedWindow.filePath)
               focusedWindow.setDocumentEdited(false)
             } else {
-              dialog.showSaveDialog({properties: ['saveFile']}, function (filePath) {
+                dialog.showSaveDialog({defaultPath: 'untitled.calculist', properties: ['saveFile']}, function (filePath) {
                 focusedWindow.webContents.send('save', filePath)
                 focusedWindow.setDocumentEdited(false)
                 focusedWindow.filePath = filePath
@@ -106,7 +106,15 @@ app.on('ready', function () {
           }
         },
         {
-          label: 'Save As'
+          label: 'Save As',
+          click (item, focusedWindow) {
+            let defaultPath = focusedWindow.filePath || 'untitled.calculist'
+            dialog.showSaveDialog({defaultPath: defaultPath, properties: ['saveFile']}, function (filePath) {
+              focusedWindow.webContents.send('save', filePath)
+              focusedWindow.setDocumentEdited(false)
+              focusedWindow.filePath = filePath
+            })
+          }
         }
       ]
     },
