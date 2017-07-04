@@ -37228,7 +37228,7 @@ calculist.require(['_','$','transaction','computeItemValue','cursorPosition','co
       var itemsOnly = _.includes(options, 'items only');
       var text;
       if (itemsOnly) {
-        text = _.map(_this.items, _.method('toText', 0, computed, hideCollapsed)).join('');
+        text = _.map(_this.items, _.method('toText', 0, {computed: computed, hideCollapsed: hideCollapsed})).join('');
       } else {
         text = _this.toText(0, {computed: computed, hideCollapsed: hideCollapsed});
       }
@@ -39313,7 +39313,7 @@ calculist.register('item.handleKeydown', ['_','$','customKeyboardShortcuts','cur
           var $input = this.$('#input' + this.id);
           var textArray = _.toArray($input.text());
           var char = e.which === 51 ? '#' : '>';
-          textArray.splice(anchorOffset - 3, anchorOffset, '[=' + char + ']');
+          textArray.splice(anchorOffset - 3, 3, '[=' + char + ']');
           $input.text(textArray.join(''));
           var range = document.createRange();
           var sel = window.getSelection();
@@ -39536,13 +39536,10 @@ calculist.require(['Item','_','parseTextDoc','getNewGuid','transaction','cursorP
         );
 
     var start = Math.min(selection.anchorOffset, selection.extentOffset),
-        end = Math.max(selection.anchorOffset, selection.extentOffset),
-        range = _.range(start, end),
+        count = Math.max(selection.anchorOffset, selection.extentOffset) - start,
         textArray = _.toArray(this.text);
 
-    _.pullAt(textArray, range);
-
-    textArray.splice(start, 0, insertingText);
+    textArray.splice(start, count, insertingText);
 
     transaction(function () {
       this.text = textArray.join('');
@@ -40547,11 +40544,19 @@ calculist.register('getAndApplyChangesFromServer', ['_','http','getItemByGuid','
           text: data.text,
           collapsed: data.is_collapsed,
           parent: getItemByGuid(data.parent_guid),
+          sort_order: data.sort_order,
           items: null
         });
       },
       addToParentItemsAtCorrectIndex = function (item, parent) {
-        var index = _.sortedIndex(parent.items, item, 'sort_order');
+        var index = 0;
+        var i = parent.items.length;
+        while (--i >= 0) {
+          if (item.sort_order >= parent.items[i].sort_order) {
+            index = i + 1;
+            break;
+          }
+        }
         parent.insertAt(item, index);
       };
 
