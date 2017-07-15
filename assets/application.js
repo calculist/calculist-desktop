@@ -36899,6 +36899,7 @@ calculist.register('commands.executePreviousCommand', ['commandTypeahead'], func
 ;
 calculist.register('commands.goHome', ['_'], function (_) {
   return function (_this) {
+    if (!window.LIST_ID /* desktop app */) return;
     window.topItem.saveNow().then(function () {
       window.location.assign('/');
     }).catch(function () {
@@ -36908,6 +36909,7 @@ calculist.register('commands.goHome', ['_'], function (_) {
 });
 calculist.register('commands.gotoList', ['_'], function (_) {
   return function (_this, listTitle) {
+    if (!window.LIST_ID /* desktop app */) return;
     listTitle || (listTitle = _this.valueOf());
     var list = _.find(window.OTHER_LISTS, function (list) {
       return list.title === listTitle || list.handle === listTitle;
@@ -36937,6 +36939,7 @@ calculist.require(['_','$','transaction','computeItemValue','cursorPosition','co
       commands.addItems.apply(commands, arguments);
     },
     newList: function (_this, title, handle) {
+      if (!window.LIST_ID /* desktop app */) return;
       if (!title) return alert('New lists need titles.');
       handle || (handle = _.lowerCase(title).replace(/\s/g,''));
       window.topItem.saveNow().then(function () {
@@ -36986,26 +36989,7 @@ calculist.require(['_','$','transaction','computeItemValue','cursorPosition','co
     },
     addText: function (_this, text) {
       if (itemOfFocus.is(_this)) {
-        var cursorIndex = cursorPosition.get(_this.depth);
-        if (_this.mode === 'command') {
-          var $input = _this.$('#input' + _this.id);
-          var textArray = _.toArray($input.text());
-          textArray.splice(cursorIndex, 0, text);
-          $input.text(textArray.join(''));
-          var range = document.createRange();
-          var sel = window.getSelection();
-          range.collapse(true);
-          range.setStart($input[0].childNodes[0], cursorIndex + text.length);
-          range.setEnd($input[0].childNodes[0], cursorIndex + text.length);
-          sel.removeAllRanges();
-          sel.addRange(range);
-        } else {
-          var textArray = _.toArray(_this.text);
-          textArray.splice(cursorIndex, 0, text);
-          _this.text = textArray.join('');
-          cursorPosition.set(_this.text, _this.depth, cursorIndex + text.length);
-        }
-        if (_this.mode !== 'command') _this.focus();
+        _this.insertTextAtCursor(text);
       } else {
         _this.text += text;
       }
@@ -37204,6 +37188,7 @@ calculist.require(['_','$','transaction','computeItemValue','cursorPosition','co
       _this.renderChildren();
     },
     followLink: function (_this, link) {
+      if (!window.LIST_ID /* desktop app */) return;
       if (!link) {
         var val = _this.valueOf();
         if (_.isString(val) && urlFinder.hasUrl(val)) {
@@ -37513,21 +37498,11 @@ calculist.require(['_','$','transaction','computeItemValue','cursorPosition','co
         _this.save();
       }
     },
-    randomNumberBetween: function (_this, x, y) {
-
-    },
-    // randomName
-    randomTip: function (_this) {
-
-    },
     noop: _.noop,
     log: function (_this) {
       var args = _.toArray(arguments);
       args.unshift(_this.toJSON());
       console.log.apply(console, args);
-    },
-    search: function (_this, query) {
-
     },
     select: function (_this, item) {
       if (_.isString(item) || _.isNumber(item)) {
@@ -37552,22 +37527,6 @@ calculist.require(['_','$','transaction','computeItemValue','cursorPosition','co
         _this.up();
       });
     },
-    shareListWith: function (_this) {
-
-    },
-    unshareListWith: function (_this) {
-
-    },
-    unshareList: function (_this) {
-
-    },
-    // moveToTop:
-    // moveToBottom:
-    // randomWord:
-    // randomAdjective:
-    // randomNoun:
-    // randomAdverb:
-    // randomVerb:
   };
   var itemMethods = [
     'zoomIn','zoomOut','moveUp','moveDown','toggleCollapse',
@@ -37602,6 +37561,7 @@ calculist.register('commands.moveToTop', ['_'], function (_) {
 });
 calculist.register('commands.permanentlyDeleteList', ['http'], function (http) {
   return function (_this, listTitle) {
+    if (!window.LIST_ID /* desktop app */) return;
     listTitle || (listTitle = _this.valueOf());
     var list = _.find(window.OTHER_LISTS, function (list) {
       return list.title === listTitle;
@@ -37619,6 +37579,45 @@ calculist.register('commands.permanentlyDeleteList', ['http'], function (http) {
     }
   }
 });
+calculist.register('commands.shareListWith', ['Backbone', '_'], function (Backbone, _) {
+  return _.rest(function (_this, usernames) {
+    if (!window.LIST_ID /* desktop app */) return;
+    usernames = _.flatten(usernames);
+    var shares = new Backbone.Model({
+      usernames: usernames
+    });
+    shares.url = '/lists/' + window.LIST_ID  + '/list_shares';
+    shares.save(null, {
+      success: function (m, response) {
+        usernames = _.map(response, 'username');
+        alert('successfully shared with ' + usernames.join(', '));
+      },
+      error: function () {
+        alert('something went wrong. sharing failed.')
+      }
+    });
+  });
+});
+calculist.register('commands.stopSharingListWith', ['http', '_'], function (http, _) {
+  return _.rest(function (_this, usernames) {
+    if (!window.LIST_ID /* desktop app */) return;
+    usernames = _.flatten(usernames);
+    var url = '/lists/' + window.LIST_ID  + '/list_shares';
+    var getUrl = usernames.length === 0 ? url : url + '?usernames=' + encodeURIComponent(JSON.stringify(usernames));
+    http.get(getUrl).then(function (response) {
+      return Promise.all(_.map(
+        response, function (share) { return http.delete(url + '/' + share.id); }
+      )).then(function () {
+        usernames = _.map(response, 'username');
+        alert('successfully stopped sharing with ' + usernames.join(', '));
+      });
+    }).catch(function () {
+      alert('something went wrong.');
+    });
+  });
+});
+
+calculist.register('commands.stopSharingList', ['commands.stopSharingListWith'], _.identity);
 calculist.require(['Item.prototype','item'], _.extend);
 calculist.register('Item', ['_','Backbone','$','getNewGuid','eventHub'], function (_, Backbone, $, getNewGuid, eventHub) {
 
@@ -38074,12 +38073,21 @@ calculist.register('createComputationContextObject', ['_','ss','evalculist','isI
     var _gcd = function (a, b) { return b !== 0 ? _gcd(b, a % b) : a; };
     if (proto.isInteger(a) && proto.isInteger(b)) return _gcd(a, b);
     return NaN;
-  }
-  proto.lcm = function (a, b) { return Math.abs(a) * (Math.abs(b) / proto.gcd(a, b)); }
-  proto.fraction = function (numerator,denominator) {
-    var gcd = proto.gcd(numerator,denominator);
+  };
+  proto.lcm = function (a, b) { return Math.abs(a) * (Math.abs(b) / proto.gcd(a, b)); };
+  proto.fraction = function (numerator, denominator) {
+    if (denominator == null) denominator = 1;
+    var ndec = numerator.toString().split('.')[1] || '';
+    var ddec = denominator.toString().split('.')[1] || '';
+    if (ndec || ddec) {
+      var adjustor = Math.pow(10, Math.max(ndec.length, ddec.length));
+      numerator = Math.round(numerator * adjustor);
+      denominator = Math.round(denominator * adjustor);
+    }
+    var gcd = proto.gcd(numerator, denominator);
     return '' + (numerator / gcd) + '/' +  (denominator / gcd);
   };
+  proto.mod = proto.modulo = function(a, b) { return (+a % (b = +b) + b) % b; };
   proto.polarToCartesian = function (r, theta) {
     var x = r * Math.cos(theta),
         y = r * Math.sin(theta);
@@ -39525,7 +39533,7 @@ calculist.require(['Item','_','getNewGuid','itemsByGuid'], function (Item, _, ge
 });
 calculist.require(['Item','_','parseTextDoc','getNewGuid','transaction','cursorPosition','itemOfFocus'], function (Item, _, parseTextDoc, getNewGuid, transaction, cursorPosition, itemOfFocus) {
 
-  Item.prototype.insertTextAtCursor = function(insertingText, skipRender) {
+  Item.prototype.insertTextAtCursor = function(insertingText) {
     if (!itemOfFocus.is(this)) return;
     var selection = _.pick(document.getSelection(),
         'anchorOffset',
@@ -39535,22 +39543,35 @@ calculist.require(['Item','_','parseTextDoc','getNewGuid','transaction','cursorP
         // 'rangeCount'
         );
 
+    var text = this.text;
+    var $input;
+    if (this.mode === 'command') {
+      $input = this.$('#input' + this.id);
+      text = $input.text();
+    }
     var start = Math.min(selection.anchorOffset, selection.extentOffset),
         count = Math.max(selection.anchorOffset, selection.extentOffset) - start,
-        textArray = _.toArray(this.text);
+        textArray = _.toArray(text);
 
     textArray.splice(start, count, insertingText);
 
     transaction(function () {
-      this.text = textArray.join('');
-      if (!skipRender) {
+      if (this.mode === 'command') {
+        $input.text(textArray.join(''));
+        var range = document.createRange();
+        var sel = window.getSelection();
+        range.collapse(true);
+        range.setStart($input[0].childNodes[0], start + insertingText.length);
+        range.setEnd($input[0].childNodes[0], start + insertingText.length);
+        sel.removeAllRanges();
+        sel.addRange(range);
+      } else {
+        this.text = textArray.join('');
         cursorPosition.set(this.text, this.depth, start + insertingText.length);
         this.render();
         this.focus();
       }
     }, this);
-
-    // console.log(selection, text);
   };
 
 });
@@ -40129,7 +40150,7 @@ calculist.register('item.up', ['_','zoomPage','cursorPosition'], function (_, zo
     if (nextUpLines.length > 1) {
       var lastLine = nextUpLines.pop(); // Remove last line
       var otherLinesLength = nextUpLines.reduce(function (sum, line) { return sum + line.length; }, 0);
-      var currentCursorPosition = cursorPosition.get(this.depth);
+      var currentCursorPosition = cursorPosition.get(nextUp.depth);
       var adjustedCursorPosition = currentCursorPosition + otherLinesLength;
       cursorPosition.set(nextUp.text, nextUp.depth, adjustedCursorPosition);
     }
@@ -40535,7 +40556,7 @@ calculist.register('eventHub', ['_','Backbone'], function (_, Backbone) {
   return eventHub;
 
 });
-calculist.register('getAndApplyChangesFromServer', ['_','http','getItemByGuid','Item'], function (_, http, getItemByGuid, Item) {
+calculist.register('getAndApplyChangesFromServer', ['_','http','getItemByGuid','Item','itemOfFocus'], function (_, http, getItemByGuid, Item, itemOfFocus) {
   var lastSave = window.INITIAL_LAST_SAVE,
       url = function (path) { return window.location.origin + path; },
       newItemFromData = function (data) {
@@ -40623,6 +40644,8 @@ calculist.register('getAndApplyChangesFromServer', ['_','http','getItemByGuid','
           _.each(parentsByGuid, function (parent) {
             parent.render();
           });
+          var iof = itemOfFocus.get();
+          iof && iof.focus();
         }
       }
       return response;
@@ -41089,11 +41112,12 @@ calculist.register('commandTypeahead', ['_','eventHub'], function (_, eventHub) 
         'shuffle items', 'for each item,','for each item recursively,','reverse items','delete items',
         'move to list ""','split to list ""','delete',
         'zoom in','zoom out','move up','move down','up','down',
+        'move to top','move to bottom','undo','redo',
         'toggle collapse','indent','outdent',
         'expand','collapse','freeze computed value',
-        'goto list','go home','goto item ""','follow link',
+        'goto item ""','follow link',
         'download as txt','download as computed txt','download as csv','download backup',
-        'new list ""','copy to clipboard','copy to clipboard "computed"','copy to clipboard "formatted"',
+        'copy to clipboard','copy to clipboard "computed"','copy to clipboard "formatted"',
         'copy to clipboard "hide collapsed"','copy items to clipboard',
         'change theme "dark"','change theme "light"','change theme "sandcastle"',
         'search for ""','change font ""','change font "Courier New"','change font "Source Code Pro"',
@@ -41107,10 +41131,18 @@ calculist.register('commandTypeahead', ['_','eventHub'], function (_, eventHub) 
       selectedCommandIndex = -1,
       $el = null;
 
-  _.each(window.OTHER_LISTS, function (otherList) {
-    availableCommands.push('goto list "' + otherList.title + '"');
-    if (otherList.handle !== 'preferences') availableCommands.push('permanently delete list "' + otherList.title  + '"');
-  });
+  if (window.LIST_ID) {
+    // NOTE These commands only make sense in the web app (not desktop),
+    // which is why they are added conditionally.
+    availableCommands.push(
+      'new list ""','goto list','go home','follow link',
+      'share list with ""','stop sharing list','stop sharing list with ""',
+    );
+    _.each(window.OTHER_LISTS, function (otherList) {
+      availableCommands.push('goto list "' + otherList.title + '"');
+      if (otherList.handle !== 'preferences') availableCommands.push('permanently delete list "' + otherList.title  + '"');
+    });
+  }
 
   var getEl = function () {
     if ($el) return $el;
