@@ -36878,6 +36878,19 @@ calculist.register('commands.changeFont',['_','$'], function (_, $) {
     );
   };
 });
+calculist.register('commands.copy', ['_','copyToClipboard','commands.copyItemsToClipboard','isItem'], function (_, copyToClipboard, copyItemsCommand, isItem) {
+  return _.rest(function (_this, thingToCopy, options) {
+    if (thingToCopy == null) thingToCopy = _this;
+    if (isItem(thingToCopy)) {
+      thingToCopy = [thingToCopy];
+    }
+    if (_.isArray(thingToCopy) && isItem(thingToCopy[0])) {
+      copyItemsCommand({ items: thingToCopy, focus: _.noop }, options);
+    } else {
+      copyToClipboard('' + thingToCopy);
+    }
+  });
+});
 calculist.register('commands.executePreviousCommand', ['commandTypeahead'], function (commandTypeahead) {
 
   var isExecuting = false;
@@ -36906,6 +36919,30 @@ calculist.register('commands.goHome', ['_'], function (_) {
       alert('saving failed');
     })
   };
+});
+calculist.register('commands.goto', ['_','isItem','getItemByGuid','zoomPage'], function (_, isItem, getItemByGuid, zoomPage) {
+
+  return function (_this, item) {
+    if (!isItem(item)) item = getItemByGuid(item) || _this.$item(item) || _this.$$item(item);
+    if (!isItem(item)) return;
+    var zoomOutUntilInPage = function (resolve, reject) {
+      if (zoomPage.isInPage(item)) {
+        resolve();
+      } else if (zoomPage.getZoomDepth() > 0) {
+        zoomPage.getTopItem().zoomOut().then(function () {
+          zoomOutUntilInPage(resolve, reject);
+        });
+      } else {
+        reject();
+      }
+    };
+    (new Promise(zoomOutUntilInPage)).then(function () {
+      item.parent ? item.parent.expand(true).then(function () {
+        item.focus();
+      }) : item.focus();
+    });
+  };
+
 });
 calculist.register('commands.gotoList', ['_'], function (_) {
   return function (_this, listTitle) {
@@ -36954,13 +36991,6 @@ calculist.require(['_','$','transaction','computeItemValue','cursorPosition','co
         if (!caseSensitive) item = new RegExp(_.escapeRegExp(item), 'i');
       }
       commands.goto(_this, item);
-    },
-    goto: function (_this, item) {
-      if (!isItem(item)) item = _this.$item(item) || _this.$$item(item);
-      // if (!zoomPage.isInPage(item)) return;
-      item.parent ? item.parent.expand(true).then(function () {
-        item.focus();
-      }) : item.focus();
     },
     gotoItem: function (_this, item) {
       commands.goto(_this, item);
@@ -37132,8 +37162,6 @@ calculist.require(['_','$','transaction','computeItemValue','cursorPosition','co
       });
       _this.renderChildren();
     },
-    sort: function() {},
-    copy: function() {},
     // TODO abstract file import into service
     importFromCsv: function(_this, labelKey) {
       importFile().then(function (file) {
@@ -37889,6 +37917,8 @@ calculist.register('computeItemValue', ['_','createComputationContextObject','ev
       return '$$item';
     }).replace(/\*item/g, function () {
       return 'global_item';
+    }).replace(/\@item/g, function () {
+      return 'itemByGuid';
     }).replace(/\$siblings/g, function() {
       return '$siblings()';
     });
@@ -37927,7 +37957,7 @@ calculist.register('computeItemValue', ['_','createComputationContextObject','ev
         }
       });
       item.isComputingValue = false;
-      if (val == null) {
+      if (val == null || val === item) {
         return NaN;
       } else if (_.isArray(val)) {
         return val;
@@ -37941,7 +37971,7 @@ calculist.register('computeItemValue', ['_','createComputationContextObject','ev
 
   };
 });
-calculist.register('createComputationContextObject', ['_','ss','evalculist','isItem','keyToVarName'], function (_, ss, evalculist, isItem, keyToVarName) {
+calculist.register('createComputationContextObject', ['_','ss','evalculist','isItem','keyToVarName','getItemByGuid'], function (_, ss, evalculist, isItem, keyToVarName, getItemByGuid) {
 
   'use strict';
 
@@ -37965,6 +37995,7 @@ calculist.register('createComputationContextObject', ['_','ss','evalculist','isI
       this.$index = item.parent ? item.parent.items.indexOf(item) : 0;
       this.$items = item.items;
       this.$name = item.key;
+      this.$guid = item.guid;
     }
   }
 
@@ -38002,8 +38033,7 @@ calculist.register('createComputationContextObject', ['_','ss','evalculist','isI
   _.each(lodashKeys, function (key) { proto[key] = _[key]; });
 
   var iterators = ['average','mean','median','mode','standardDeviation','products',
-                  'reverse','unzip',
-                  'filter','find','findLast','map','reduce'];
+                  'unzip','filter','find','findLast','map','reduce'];
 
   _.each(iterators, function (methodName) {
     proto[methodName] = itemsFirst(proto[methodName]);
@@ -38087,6 +38117,21 @@ calculist.register('createComputationContextObject', ['_','ss','evalculist','isI
     var gcd = proto.gcd(numerator, denominator);
     return '' + (numerator / gcd) + '/' +  (denominator / gcd);
   };
+  proto.wordCount = function (item) {
+    var count = 0;
+    var items = item;
+    if (isItem(item)) {
+      if (_.isUndefined(item.key)) item.valueOf();
+      count = _.words('' + item.key + ' ' + (item.val || '')).length;
+      items = item.items;
+      if (items.length === 0) return count;
+    } else if (!_.isArray(items)) {
+      return _.words('' + item).length;
+    }
+    return _.reduce(items, function (sum, item) {
+      return sum + proto.wordCount(item);
+    }, count);
+  };
   proto.mod = proto.modulo = function(a, b) { return (+a % (b = +b) + b) % b; };
   proto.polarToCartesian = function (r, theta) {
     var x = r * Math.cos(theta),
@@ -38126,6 +38171,7 @@ calculist.register('createComputationContextObject', ['_','ss','evalculist','isI
   proto.itemsOf = _.property('items');
   proto.nameOf = _.property('key');
   proto.parentOf = _.property('parent');
+  proto.guidOf = _.property('guid');
   proto.indexOf = itemsFirst(function (array, item) {
     return array.indexOf(item);
   });
@@ -38240,6 +38286,10 @@ calculist.register('createComputationContextObject', ['_','ss','evalculist','isI
     return window.topItem.$item(key);
   };
 
+  proto.itemByGuid = function (guid) {
+    return getItemByGuid(guid);
+  };
+
   // evalculist adds a special "accessor" function for things like a['b']
   // so it becomes accessor(a, 'b')
   proto.accessor = function (obj, key) {
@@ -38275,6 +38325,12 @@ calculist.register('createComputationContextObject', ['_','ss','evalculist','isI
 
   proto.slice = itemsFirst(function (items, start, end) {
     var result = _.slice(items, start, end);
+    if (_.isString(items)) return result.join('');
+    return result;
+  });
+
+  proto.reverse = itemsFirst(function (items) {
+    var result = _.reverse(_.toArray(items));
     if (_.isString(items)) return result.join('');
     return result;
   });
@@ -39114,6 +39170,7 @@ calculist.register('item.handleBlur', ['_','eventHub'], function (_, eventHub) {
     if (!item) return;
     _.pull(itemsToBlur, item);
     item.showComputedValue();
+    item.showLinkButtons();
     var $input = item.$("#input" + item.id);
     $input.removeClass('focus');
     eventHub.trigger('item.handleBlur', item);
@@ -39195,6 +39252,7 @@ calculist.require(['Item', 'cursorPosition','isReadOnly','itemOfFocus','itemOfDr
     if (isReadOnly()) return;
     this.showTrueValue();
     this.showComputedValue();
+    this.showLinkButtons();
     var $input = this.$("#input" + this.id);
     $input.addClass('focus');
     // $input[0].selectionStart = cursorPosition.get();
@@ -39762,11 +39820,12 @@ calculist.require(['Item','_','itemOfFocus'], function (Item, _, itemOfFocus) {
     } else {
       this.undelegateEvents();
     }
+    var isFocused = itemOfFocus.is(this);
     var templateData = {
       id: this.id,
-      text: this.getComputedHTML(),
+      text: isFocused ? _.escape(this.text) : this.getComputedHTML(),
       collapsed: this.collapsed,
-      focus: itemOfFocus.is(this)
+      focus: isFocused
     };
     this.$el.html(this.template(templateData));
     this.addOrRemoveClasses();
@@ -39806,6 +39865,7 @@ calculist.require(['Item','_','itemOfFocus'], function (Item, _, itemOfFocus) {
       this.$("#computed-display" + this.id).text('');
       this.computedDisplayIsVisible = false;
     }
+    this.showLinkButtons();
     this.addOrRemoveClasses();
     this.applyLocalStyle();
     if (!this.collapsed) {
@@ -39871,6 +39931,49 @@ calculist.require(['Item','itemOfFocus'], function (Item, itemOfFocus) {
     }
   };
 
+});
+calculist.register('item.showLinkButtons', ['_','$','urlFinder','itemOfFocus','zoomPage'], function (_, $, urlFinder, itemOfFocus, zoomPage) {
+
+  var externalLinkIcon = '<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAVklEQVR4Xn3PgQkAMQhDUXfqTu7kTtkpd5RA8AInfArtQ2iRXFWT2QedAfttj2FsPIOE1eCOlEuoWWjgzYaB/IkeGOrxXhqB+uA9Bfcm0lAZuh+YIeAD+cAqSz4kCMUAAAAASUVORK5CYII=">';
+
+  var removeLinkButtons = function (_this) {
+    if (_this.$linkButtons) {
+      _this.$linkButtons.remove();
+      _this.$linkButtons = null;
+    }
+  };
+
+  return function () {
+    this.valueOf();
+    var text = this.key + ' ' + (this.val || '');
+    var urls = urlFinder.getUrls(text);
+    if (!urls || !urls.length || !zoomPage.isInPage(this)) {
+      removeLinkButtons(this);
+      return;
+    }
+    if (!this.$linkButtons) {
+      this.$linkButtons = $('<div class="link-buttons"></div>');
+    }
+    this.$el.prepend(this.$linkButtons);
+    this.$linkButtons.html(
+      _.map(urls, function (url) {
+        return '<a href="' + url + '" target="_blank" title="' + url + '">' + externalLinkIcon + '</a> ';
+      }).join('')
+    );
+    if (itemOfFocus.is(this)) {
+      this.$linkButtons.addClass('focus');
+    } else {
+      this.$linkButtons.removeClass('focus');
+    }
+    if (window.FILE_PATH) {
+      // desktop
+      this.$linkButtons.find('a').on('click', function (e) {
+        e.preventDefault();
+        var shell = require('electron').shell;
+        shell.openExternal(e.currentTarget.href);
+      });
+    }
+  };
 });
 calculist.require(['Item','_'], function (Item, _) {
 
@@ -39971,10 +40074,8 @@ calculist.register('item.template', ['_','isReadOnly'], function (_, isReadOnly)
   return _.template(
     '<div class="input-container">' +
       '<div class="computed-display" id="computed-display<%= id %>"></div>' +
-      // '<input id="command-input<%= id %>" type="text" style="display:none;float:left;width:100%;">' +
       '<div class="dot <%= collapsed ? "collapsed" : "" %>" id="dot<%= id %>"></div>' +
       '<pre id="input<%= id %>" class="input<%= focus ? " focus" : "" %>"' + (isReadOnly() ? '' : ' contenteditable="true"') + '><%= (text || "") %></pre>' +
-      // '<ul id="typeahead<%= id %>" style="display:none;position:absolute;width:100%;"></ul>' +
     '</div>' +
     '<ul id="list<%= id %>"></ul>'
   );
@@ -40184,6 +40285,7 @@ calculist.require(['Item','_','parseItemText','computeItemValue','somethingHasCh
             this.hasVal = true;
             this.valIsComputed = true;
             this.val = computeItemValue(parsedText.val, this);
+            if (this.val === this) throw new Error('item cannot be its own value');
             this._valueOf = this.val;
             break;
           case ('[=>]'):
@@ -40260,20 +40362,23 @@ calculist.require(['Item','_','$','lmSessionStorage','zoomPage'], function (Item
   Item.prototype.zoomOut = function() {
     if (lmSessionStorage.get('zoomGuid') === this.guid) {
       var _this = this;
-      zoomPage.detach(this).then(function () {
-        if (_this.wasCollapsed) {
-          _this.wasCollapsed = false;
-          _this.collapse(true).then(function () {
-            _this.focus();
-          });
-        }
-      });
-      this.alreadyZoomedIn = false;
-      this.getTopItem().zoomIn({
-        zoomOut: true
+      return new Promise(function (resolve, reject) {
+        zoomPage.detach().then(function () {
+          if (_this.wasCollapsed) {
+            _this.wasCollapsed = false;
+            _this.collapse(true).then(function () {
+              _this.focus();
+            });
+          }
+          resolve();
+        });
+        _this.alreadyZoomedIn = false;
+        _this.getTopItem().zoomIn({
+          zoomOut: true
+        });
       });
     } else {
-      this.parent.zoomOut();
+      return this.parent.zoomOut();
     }
   };
 
@@ -40581,7 +40686,10 @@ calculist.register('getAndApplyChangesFromServer', ['_','http','getItemByGuid','
         parent.insertAt(item, index);
       };
 
+  var resolvedPromise = new Promise(function (resolve) { resolve(); });
+
   return function (alternateLastSave) {
+    if (!window.LIST_ID) return resolvedPromise;
     if (alternateLastSave > lastSave) lastSave = alternateLastSave;
     return http.get(url('/lists/' + window.LIST_ID), {
       last_save: lastSave
@@ -41011,12 +41119,13 @@ calculist.register('urlFinder', [], function () {
     "(?:[/?#]\\S*)?";
 
   var hasUrlPattern = new RegExp(basePatternString, 'i');
+  var allUrlsPattern = new RegExp(basePatternString, 'ig');
   var isUrlPattern = new RegExp('^' + basePatternString + '$', 'i');
   return {
     hasUrl: function (string) { return hasUrlPattern.test(string); },
     isUrl: function (string) { return isUrlPattern.test(string); },
     replaceUrl: function (string, replacer) { return string.replace(hasUrlPattern, replacer); },
-    getUrls: function (string) { return string.match(hasUrlPattern); }
+    getUrls: function (string) { return string.match(allUrlsPattern); }
   }
 });
 calculist.register('userIsTyping', ['_','eventHub'], function (_, eventHub) {
@@ -41117,8 +41226,7 @@ calculist.register('commandTypeahead', ['_','eventHub'], function (_, eventHub) 
         'expand','collapse','freeze computed value',
         'goto item ""','follow link',
         'download as txt','download as computed txt','download as csv','download backup',
-        'copy to clipboard','copy to clipboard "computed"','copy to clipboard "formatted"',
-        'copy to clipboard "hide collapsed"','copy items to clipboard',
+        'copy','copy ( $items )','copy ( $value )','copy ( $name )','copy ( $guid )',
         'change theme "dark"','change theme "light"','change theme "sandcastle"',
         'search for ""','change font ""','change font "Courier New"','change font "Source Code Pro"',
       ],
@@ -41412,6 +41520,7 @@ calculist.register('zoomPage',['_','$','Promise','lmSessionStorage','getItemByGu
       }
       return lastItem;
     },
+    getZoomDepth: function () { return stack.length; },
     isInPage: function (item) {
       var topItem = (_.last(stack) || {}).item;
       if (!topItem || item === topItem) return true;
@@ -41567,13 +41676,6 @@ calculist.register('http', ['Promise','_','$'], function (Promise, _, $) {
 // TODO refactor
 calculist.init(['LIST_DATA','Item','_','$','Backbone','lmDiff','saveButton','getAndApplyChangesFromServer','jsonToItemTree','getNewGuid','userPreferences','executeCommand','calculistFileFormatter'], function (foo, Item, _, $, Backbone, lmDiff, saveButton, getAndApplyChangesFromServer, jsonToItemTree, getNewGuid, userPreferences, executeCommand, calculistFileFormatter) {
   window.DEV_MODE = window.localStorage.DEV_MODE;
-  var jsonView = window.location.search.split('?json=')[1];
-  if (jsonView) {
-    window.LIST_DATA = jsonToItemTree(decodeURIComponent(jsonView));
-    getAndApplyChangesFromServer = _.constant({then: _.noop});
-    saveButton.hide();
-  }
-
   if (!window.LIST_DATA) return;
   $(function() {
     if (!LIST_DATA.guid) {
@@ -41581,6 +41683,7 @@ calculist.init(['LIST_DATA','Item','_','$','Backbone','lmDiff','saveButton','get
     }
     window.topItem = new Item(LIST_DATA);
     var saveCount = 0, updateCount = 0;
+    var originalFilePath = window.FILE_PATH;
     if (window.FILE_PATH) {
       var openFile = function (filePath) {
         console.log(filePath)
@@ -41625,16 +41728,20 @@ calculist.init(['LIST_DATA','Item','_','$','Backbone','lmDiff','saveButton','get
           // });
         });
       }
-      var electron = require('electron')
+      var electron = require('electron');
       electron.ipcRenderer.on('save', function (event, filePath) {
-        window.topItem.saveNow(filePath)
+        if (!filePath) return;
+        window.topItem.saveNow(filePath);
         window.FILE_PATH = filePath;
         window.LIST_TITLE = filePath.split('/').pop();
         window.document.title = window.LIST_TITLE;
-      })
+      });
       electron.ipcRenderer.on('open', function (event, filePath) {
         openFile(filePath);
-      })
+      });
+      electron.ipcRenderer.on('set-window-id', function (event, id) {
+        window.id = id;
+      });
       openFile(window.FILE_PATH)
     }
     var ul = document.getElementById('top-level');
@@ -41654,6 +41761,7 @@ calculist.init(['LIST_DATA','Item','_','$','Backbone','lmDiff','saveButton','get
           saveButton.changeStatus('saved');
           return window.topItem.waitingBeforeSave = false;
         }
+        if (!window.LIST_ID) return resolve();
         window.topItem.ensureGuidsAreUnique();
         window.topItem.refreshDepth();
         var newContent = JSON.stringify(window.topItem);
@@ -41744,8 +41852,13 @@ calculist.init(['LIST_DATA','Item','_','$','Backbone','lmDiff','saveButton','get
         }
       });
     });
-    saveButton.onClick(function () { window.topItem.saveNow(); });
-    // localStorage.tabsOpen = +(localStorage.tabsOpen || '0') + 1;
+    saveButton.onClick(function () {
+      if (window.FILE_PATH && window.FILE_PATH === originalFilePath) {
+        require('electron').ipcRenderer.send('save-attempt', window.id);
+      } else {
+        window.topItem.saveNow(window.FILE_PATH);
+      }
+    });
     var refocus = function() {
       _.defer(function() {
         if (!document.hidden) {
@@ -41797,31 +41910,6 @@ calculist.init(['LIST_DATA','Item','_','$','Backbone','lmDiff','saveButton','get
 
       }
     }
-    // window.addEventListener('storage', function(storageEvent) {
-    //   var data, item, key, newValue, oldValue, zoomGuid;
-    //   key = storageEvent.key, newValue = storageEvent.newValue, oldValue = storageEvent.oldValue;
-    //   if (key === 'items') {
-    //     localStorage.tabsOpen = +(localStorage.tabsOpen || '0') + 1;
-    //     if (newValue) {
-    //       data = JSON.parse(newValue);
-    //       window.topItem.initialize(data);
-    //       window.topItem.text = data.text;
-    //       zoomGuid = sessionStorage.zoomGuid;
-    //       if (zoomGuid && zoomGuid !== window.topItem.guid) {
-    //         item = window.topItem.$item(zoomGuid, 'guid');
-    //         item.zoomIn({
-    //           focus: false
-    //         });
-    //       } else {
-    //         window.topItem.render();
-    //       }
-    //       refocus();
-    //     }
-    //   }
-    // });
-    // window.addEventListener('unload', function() {
-    //   localStorage.tabsOpen = +(localStorage.tabsOpen || '1') - 1;
-    // });
 
     window.requestAnimationFrame(function () {
       // This fixes a bug where computed values

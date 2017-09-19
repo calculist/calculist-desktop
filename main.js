@@ -12,6 +12,15 @@ const Menu = electron.Menu
 // be closed automatically when the JavaScript object is garbage collected.
 let windowStack = []
 
+function saveAs (focusedWindow) {
+  let defaultPath = focusedWindow.filePath || 'untitled.calculist'
+  dialog.showSaveDialog({defaultPath: defaultPath, properties: ['saveFile']}, function (filePath) {
+    focusedWindow.webContents.send('save', filePath)
+    focusedWindow.setDocumentEdited(false)
+    focusedWindow.filePath = filePath
+  });
+}
+
 function createWindow (filePath) {
   // Create the browser window.
   let newWindow = new BrowserWindow({width: 1200, height: 800, show: false})
@@ -22,7 +31,12 @@ function createWindow (filePath) {
       newWindow.filePath = filePath
       newWindow.webContents.send('open', filePath)
     } else {
-      newWindow.setDocumentEdited(true)
+      const windowId = _.uniqueId();
+      newWindow.webContents.send('set-window-id', windowId);
+      newWindow.setDocumentEdited(true);
+      ipcMain.on('save-attempt', (event, id) => {
+        if (id === windowId) saveAs(newWindow);
+      });
     }
   })
   // and load the index.html of the app.
@@ -97,7 +111,7 @@ app.on('ready', function () {
               focusedWindow.webContents.send('save', focusedWindow.filePath)
               focusedWindow.setDocumentEdited(false)
             } else {
-                dialog.showSaveDialog({defaultPath: 'untitled.calculist', properties: ['saveFile']}, function (filePath) {
+              dialog.showSaveDialog({defaultPath: 'untitled.calculist', properties: ['saveFile']}, function (filePath) {
                 focusedWindow.webContents.send('save', filePath)
                 focusedWindow.setDocumentEdited(false)
                 focusedWindow.filePath = filePath
@@ -108,12 +122,7 @@ app.on('ready', function () {
         {
           label: 'Save As',
           click (item, focusedWindow) {
-            let defaultPath = focusedWindow.filePath || 'untitled.calculist'
-            dialog.showSaveDialog({defaultPath: defaultPath, properties: ['saveFile']}, function (filePath) {
-              focusedWindow.webContents.send('save', filePath)
-              focusedWindow.setDocumentEdited(false)
-              focusedWindow.filePath = filePath
-            })
+            saveAs(focusedWindow);
           }
         }
       ]
