@@ -211,8 +211,8 @@ app.on('ready', function () {
       role: 'help',
       submenu: [
         {
-          label: 'Learn More',
-          click () { require('electron').shell.openExternal('http://electron.atom.io') }
+          label: 'Documentation',
+          click () { require('electron').shell.openExternal('https://github.com/calculist/calculist/wiki') }
         }
       ]
     }
