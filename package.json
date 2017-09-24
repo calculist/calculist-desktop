@@ -1,7 +1,7 @@
 {
   "name": "CalculistDesktop",
   "productName": "Calculist",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "license": "MIT",
   "description": "Desktop version of Calculist.io",
   "main": "./main.js",
