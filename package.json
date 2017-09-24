@@ -7,6 +7,21 @@
   "main": "./main.js",
   "build": {
     "appId": "org.calculist.Calculist",
+    "mac": {
+      "category": "public.app-category.productivity",
+      "target": "dmg"
+    },
+    "win": {
+      "target": "nsis",
+      "icon": "build/icon.ico"
+    },
+    "linux": {
+      "category": "Science",
+      "target": [
+        "AppImage",
+        "deb"
+      ]
+    },
     "dmg": {
       "contents": [
         {
@@ -19,16 +34,6 @@
           "type": "link",
           "path": "/Applications"
         }
-      ]
-    },
-    "win": {
-      "target": "nsis",
-      "icon": "build/icon.ico"
-    },
-    "linux": {
-      "target": [
-        "AppImage",
-        "deb"
       ]
     }
   },
