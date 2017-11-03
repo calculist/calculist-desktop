@@ -9,7 +9,7 @@
   <div id="main-container" class="theme-light">
     <header id="header">
       <img id="logo" src="assets/images/logo-blue-black.svg">
-      <span id="version">v0.3.0</span>
+      <span id="version"></span>
       <div class="header-right">
         <span id="save-status">saved</span>
       </div>
@@ -39,6 +39,13 @@
   </script>
   <script src="assets/application.js" type="text/javascript"></script>
   <script>if (window.module) module = window.module;</script>
+  <script>
+  (function () {
+    var fs = require('fs');
+    var version = JSON.parse(fs.readFileSync('package.json')).version;
+    document.getElementById('version').textContent = 'v' + version;
+  })();
+  </script>
   </body>
 
 </html>
