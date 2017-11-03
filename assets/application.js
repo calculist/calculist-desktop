@@ -37971,7 +37971,7 @@ calculist.register('computeItemValue', ['_','createComputationContextObject','ev
 
   };
 });
-calculist.register('createComputationContextObject', ['_','ss','evalculist','isItem','keyToVarName','getItemByGuid'], function (_, ss, evalculist, isItem, keyToVarName, getItemByGuid) {
+calculist.register('createComputationContextObject', ['_','ss','evalculist','isItem','keyToVarName','getItemByGuid','urlFinder'], function (_, ss, evalculist, isItem, keyToVarName, getItemByGuid, urlFinder) {
 
   'use strict';
 
@@ -38033,7 +38033,7 @@ calculist.register('createComputationContextObject', ['_','ss','evalculist','isI
   _.each(lodashKeys, function (key) { proto[key] = _[key]; });
 
   var iterators = ['average','mean','median','mode','standardDeviation','products',
-                  'unzip','filter','find','findLast','map','reduce'];
+                  'unzip','filter','find','findLast','map','reduce','min','max','join'];
 
   _.each(iterators, function (methodName) {
     proto[methodName] = itemsFirst(proto[methodName]);
@@ -38065,9 +38065,10 @@ calculist.register('createComputationContextObject', ['_','ss','evalculist','isI
     return partialFn;
   });
 
-  proto.average = proto.mean = function (items, defaultValue) {
+  proto.average = proto.mean = itemsFirst(function (items, defaultValue) {
     return proto.sum(items, defaultValue) / items.length;
-  };
+  });
+
   proto.sum = itemsFirst(function(items, defaultValue) {
     if (defaultValue != null) {
       return items.reduce(function(sum, item) {
@@ -38187,6 +38188,35 @@ calculist.register('createComputationContextObject', ['_','ss','evalculist','isI
       if (pluckedItem) pluckedItems.push(pluckedItem);
       return pluckedItems;
     }, []);
+  });
+
+  proto.function = proto.fn = _.rest(function (string, partialArgs) {
+    var pieces = ('' + string).split('|');
+    var argNames = pieces.length > 1 ? pieces.shift().split(',') : [];
+    var fnBody = pieces.join('|')
+    var evalFn = evalculist(fnBody);
+    var fn = function () {
+      var args = partialArgs.concat(_.toArray(arguments));
+      var localVars = argNames.reduce(function (localVars, name, i) {
+        localVars[_.trim(name)] = args[i];
+        return localVars;
+      }, {});
+      return evalFn({
+        variable: function (name) {
+          if (localVars.hasOwnProperty(name)) return localVars[name];
+          return proto[name];
+        },
+        accessor: proto.accessor,
+        dotAccessor: proto.dotAccessor,
+        assignment: function (name, val) {
+          return localVars[name] = val;
+        }
+      });
+    };
+    var argString = argNames.slice(partialArgs.length).join(',');
+    var fnString = argString ? (argString + '|'  + fnBody) : fnBody;
+    fn.toString = _.constant(fnString);
+    return fn;
   });
 
   proto.flowMap = itemsFirst(function () {
@@ -38317,6 +38347,20 @@ calculist.register('createComputationContextObject', ['_','ss','evalculist','isI
       return _.flatten(items);
     }
   });
+
+  var imageToString = _.constant('[Image]');
+  proto.image = function (url, width, height) {
+    if (!urlFinder.isUrl(url)) return NaN;
+    var html = '<img src="' + url + '"';
+    if (_.isNumber(+width)) html += ' width="' + (+width) + '"';
+    if (_.isNumber(+height)) html += ' height="' + (+height) + '"';
+    html += '/>';
+    return {
+      mediaType: 'image',
+      toString: imageToString,
+      toHTML: _.constant(html),
+    };
+  };
 
   proto.uniq = proto.unique = itemsFirst(function (items) {
     items = _.map(items, proto.valueOf);
@@ -39046,7 +39090,12 @@ calculist.require(['Item','removeHTML','_'], function (Item, removeHTML, _) {
     this.valueOf();
     val = this.val;
     if (val != null) {
-      val = "<span class='value'>" + (this.formatVal(val)) + "</span>";
+      if (_.isPlainObject(val) && val.toHTML) {
+        val = val.toHTML();
+      } else {
+        val = this.formatVal(val);
+      }
+      val = "<span class='value'>" + val + "</span>";
       if (this.key) {
         return "<span class='key'>" + (this.formatKey(this.key)) + "</span>: " + val;
       } else {
@@ -39173,6 +39222,7 @@ calculist.register('item.handleBlur', ['_','eventHub'], function (_, eventHub) {
     item.showLinkButtons();
     var $input = item.$("#input" + item.id);
     $input.removeClass('focus');
+    $input.css({minHeight: 'auto'});
     eventHub.trigger('item.handleBlur', item);
   };
 
@@ -39250,11 +39300,13 @@ calculist.require(['Item', 'cursorPosition','isReadOnly','itemOfFocus','itemOfDr
     itemOfFocus.change(this);
     sessionStorage.focusGuid = this.guid;
     if (isReadOnly()) return;
+    var $input = this.$("#input" + this.id);
+    var previousHeight = $input.height();
     this.showTrueValue();
     this.showComputedValue();
     this.showLinkButtons();
-    var $input = this.$("#input" + this.id);
     $input.addClass('focus');
+    $input.css({minHeight: previousHeight});
     // $input[0].selectionStart = cursorPosition.get();
     // $input[0].selectionEnd = 0;
     var range = document.createRange();
@@ -39902,7 +39954,7 @@ calculist.require(['Item','itemOfFocus'], function (Item, itemOfFocus) {
       this.valueOf();
       val = this.val;
       if (this.valIsComputed && this.hasVal) {
-        val = this.formatVal(val);
+        val = (_.isPlainObject(val) && val.toHTML) ? val.toString() : this.formatVal(val);
         $cd = this.$("#computed-display" + this.id);
         $cd.text("" + val).css({
           'margin-left': -$cd.width()
@@ -41224,7 +41276,7 @@ calculist.register('commandTypeahead', ['_','eventHub'], function (_, eventHub) 
         'move to top','move to bottom','undo','redo',
         'toggle collapse','indent','outdent',
         'expand','collapse','freeze computed value',
-        'goto item ""','follow link',
+        'goto','add item ""', 'add items',
         'download as txt','download as computed txt','download as csv','download backup',
         'copy','copy ( $items )','copy ( $value )','copy ( $name )','copy ( $guid )',
         'change theme "dark"','change theme "light"','change theme "sandcastle"',
