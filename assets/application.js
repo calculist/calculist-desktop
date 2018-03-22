@@ -53367,7 +53367,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 })));
 /**
  * @license
- * evalculist 0.2.2
+ * evalculist 0.2.3
  * Copyright 2017 Dan Allison <dan@calculist.io> and Calculist LLC <http://calculist.io>
  * Released under MIT license
  */
@@ -53431,7 +53431,11 @@ Object.defineProperty(exports, '__esModule', { value: true });
           exp = '[' + nextExp + (nextT ? nextT[TOKEN_STRING_INDEX] : '');
         }
         if (expressions.length) {
-          expressions[expressions.length - 1] = exp;
+          if (prevT[TOKEN_TYPE_INDEX] === EXPRESSION_TOKEN) {
+            expressions[expressions.length - 1] += exp;
+          } else {
+            expressions[expressions.length - 1] = exp;
+          }
         } else {
           expressions.push(exp);
         }
@@ -53856,6 +53860,7 @@ calculist.register('itemsToSVG', ['_'], function (_) {
     var topTag = options.topTag || 'svg';
     var scaleX = options.scaleX || _.identity;
     var scaleY = options.scaleY || _.identity;
+    var scaleWidth = options.scaleWidth || scaleX;
     var scaleHeight = options.scaleHeight || scaleY;
     var addItems, addElement;
     var currentTag;
@@ -53868,21 +53873,26 @@ calculist.register('itemsToSVG', ['_'], function (_) {
           addElement(_item, datum, i);
         } else if (attributes[_item.key]) {
           if (_.isFunction(val)) val = val(datum, i);
-          if (isXAttr(_item.key)) val = scaleX(val);
-          if (_item.key === 'width') val = scaleX(val) - scaleX(0);
-          if (isYAttr(_item.key) || _item.key === 'height') {
+          if (isXAttr(_item.key) || _item.key === 'width' || isYAttr(_item.key) || _item.key === 'height') {
             if (currentTag === 'rect') {
               currentRect || (currentRect = {});
               currentRect[_item.key] = val;
-              if (currentRect['y'] != null && currentRect['height'] != null) {
+              var allRectCoordinatesHaveBeenSpecified = currentRect['x'] != null &&
+                                                        currentRect['width'] != null &&
+                                                        currentRect['y'] != null &&
+                                                        currentRect['height'] != null;
+              if (allRectCoordinatesHaveBeenSpecified) {
+                var width = scaleWidth(currentRect['width']);
+                var x = currentRect['width'] < 0 ? (scaleX(currentRect['x']) - width) : scaleX(currentRect['x']);
                 var height = scaleHeight(currentRect['height']);
-                var y = scaleY(currentRect['y']) - height;
-                svg += 'y="' + _.escape(y) + '" height="' + _.escape(height) + '" ';
+                var y = currentRect['height'] < 0 ? scaleY(currentRect['y']) : (scaleY(currentRect['y']) - height);
+                svg += 'x="' + _.escape(x) + '" width="' + _.escape(width) + '" ' +
+                    'y="' + _.escape(y) + '" height="' + _.escape(height) + '" ';
                 currentRect = null;
               }
               return;
             } else {
-              val = scaleY(val);
+              val = isXAttr(_item.key) ? scaleX(val) : scaleY(val);
             }
           }
           svg += _item.key + '="' + _.escape(val) + '" ';
@@ -55299,8 +55309,16 @@ calculist.register('createComputationContextObject', ['_','ss','d3','evalculist'
     return NaN;
   };
   proto.lcm = function (a, b) { return Math.abs(a) * (Math.abs(b) / proto.gcd(a, b)); };
-  proto.fraction = function (numerator, denominator) {
-    if (denominator == null) denominator = 1;
+  proto.fraction = function (numerator, denominator, returnFn) {
+    if (_.isFunction(denominator) && !returnFn) {
+      returnFn = denominator;
+      denominator = 1;
+    } else if (denominator == null) {
+      denominator = 1;
+    }
+    if (!returnFn) {
+      returnFn = function (n, d) { return '' + n + '/' +  d; };
+    }
     var ndec = numerator.toString().split('.')[1] || '';
     var ddec = denominator.toString().split('.')[1] || '';
     if (ndec || ddec) {
@@ -55309,7 +55327,7 @@ calculist.register('createComputationContextObject', ['_','ss','d3','evalculist'
       denominator = Math.round(denominator * adjustor);
     }
     var gcd = proto.gcd(numerator, denominator);
-    return '' + (numerator / gcd) + '/' +  (denominator / gcd);
+    return returnFn(numerator / gcd, denominator / gcd);
   };
   proto.wordCount = function (item) {
     var count = 0;
@@ -55569,7 +55587,7 @@ calculist.register('createComputationContextObject', ['_','ss','d3','evalculist'
     type: 'blank',
     width: 500,
     height: 400,
-    margin: 10,
+    margin: 30,
     draw: null,
     blank: {
       x: {
@@ -55625,6 +55643,28 @@ calculist.register('createComputationContextObject', ['_','ss','d3','evalculist'
       color: {
         datum: _.constant('black'),
         background: 'none',
+      }
+    },
+    linegraph: {
+      x: {
+        datum: function (item, i) { return i; },
+        scale: 'linear',
+        ticks: function (values) { return Math.min(10, values.length); },
+        tick_format: _.identity,
+        domain: function (xValues) {
+          xValues = xValues.concat([0]);
+          return [_.min(xValues), _.max(xValues)];
+        }
+      },
+      y: {
+        datum: function (item) { return item.valueOf(); },
+        scale: 'linear',
+        ticks: function (values) { return Math.min(10, values.length); },
+        tick_format: _.identity,
+        domain: function (yValues) {
+          yValues = yValues.concat([0]);
+          return [_.min(yValues), _.max(yValues)];
+        }
       }
     },
     barchart: {
@@ -55708,14 +55748,14 @@ calculist.register('createComputationContextObject', ['_','ss','d3','evalculist'
     var yDomain = config.y.domain;
     if (_.isFunction(xDomain)) xDomain = xDomain(xValues);
     if (_.isFunction(yDomain)) yDomain = yDomain(yValues);
-    var scaleX = d3.scaleLinear()
-      .domain(xDomain)
-      .range([0 + config.margin, config.width - config.margin]);
-    var scaleY = d3.scaleLinear()
-      .domain(yDomain)
-      .range([config.height - config.margin, 0 + config.margin]);
-    var scaleHeight = scaleY.copy()
-      .range([0, config.height - (2 * config.margin)]);
+    var xRange = [0 + config.margin, config.width - config.margin];
+    var yRange = [config.height - config.margin, 0 + config.margin];
+    var scaleX = d3.scaleLinear().domain(xDomain).range(xRange);
+    var scaleY = d3.scaleLinear().domain(yDomain).range(yRange);
+    var _scaleWidth = d3.scaleLinear().domain([0, 1]).range([0, scaleX(1) - scaleX(0)]);
+    var scaleWidth = _.flow(Math.abs, _scaleWidth);
+    var _scaleHeight = d3.scaleLinear().domain([0, 1]).range([0, scaleY(0) - scaleY(1)]);
+    var scaleHeight = _.flow(Math.abs, _scaleHeight);
 
     var xTicks = config.x.ticks;
     var yTicks = config.y.ticks;
@@ -55725,20 +55765,38 @@ calculist.register('createComputationContextObject', ['_','ss','d3','evalculist'
     if (_.isNumber(yTicks)) yTicks = scaleY.ticks(yTicks);
 
     var html = '<svg width="' + config.width + '" height="' + config.height + '">' +
-    '<g>' +
-    (config.type === 'scatterplot' ?
-      data.map(function (datum, i) {
-        return '<circle cx="' + scaleX(datum.x) + '"' +
-          ' cy="' + scaleY(datum.y) + '" r="' + datum.r + '" fill="' + datum.color + '"/>';
-      }).join('') :
-    (config.type === 'barchart' ?
-      data.map(function (datum, i) {
-        return '<rect x="' + scaleX(datum.x) + '"' + ' y="' + (scaleY(datum.y) - scaleHeight(datum.bar_height)) +
-          '" width="' + (scaleX(datum.bar_width) - scaleX(0)) + '" height="' + scaleHeight(datum.bar_height) + '" fill="' + datum.color + '"/>';
-      }).join('') : '')
-    ) +
-    '</g>' +
-    (config.draw ? itemsToSVG(itemsIfItem(config.draw), {topTag:'g',scaleX:scaleX,scaleY:scaleY,scaleHeight:scaleHeight}) : '') +
+    '<g>' + (function () {
+      switch (config.type) {
+        case 'scatterplot':
+          return data.map(function (datum, i) {
+            return '<circle cx="' + scaleX(datum.x) + '"' +
+              ' cy="' + scaleY(datum.y) + '" r="' + datum.r + '" fill="' + datum.color + '"/>';
+          }).join('');
+        case 'linegraph':
+          var path = d3.path();
+          data.forEach(function (datum, i) {
+            if (i === 0) {
+              path.moveTo(scaleX(datum.x), scaleY(datum.y));
+            } else {
+              path.lineTo(scaleX(datum.x), scaleY(datum.y));
+            }
+          });
+          return '<path d="' + path + '" stroke="' + 'steelblue' + '" stroke-width="2" fill="none"/>';
+        case 'barchart':
+          return data.map(function (datum, i) {
+            var scaledX = scaleX(datum.x);
+            var scaledY = scaleY(datum.y);
+            var scaledWidth = scaleWidth(datum.bar_width);
+            var scaledHeight = scaleHeight(datum.bar_height);
+            return '<rect x="' + (datum.bar_width < 0 ? (scaledX - scaledWidth) : scaledX) + '"' +
+              ' y="' + (datum.bar_height < 0 ? scaledY : (scaledY - scaledHeight)) +
+              '" width="' + scaledWidth + '" height="' + scaledHeight + '" fill="' + datum.color + '"/>';
+          }).join('');
+        default:
+          return '';
+      }
+    })() + '</g>' +
+    (config.draw ? itemsToSVG(itemsIfItem(config.draw), {topTag:'g',scaleX:scaleX,scaleY:scaleY,scaleWidth:scaleWidth,scaleHeight:scaleHeight}) : '') +
     '<g>' +
     '<line x1="0" y1="' + scaleY(0) + '" x2="' + config.width + '" y2="' + scaleY(0) + '" stroke-width="2" stroke="#000"/>' +
     '<line x1="' + scaleX(0) + '" y1="0" x2="' + scaleX(0) + '" y2="' + config.height + '" stroke-width="2" stroke="#000"/>' +
@@ -55760,9 +55818,63 @@ calculist.register('createComputationContextObject', ['_','ss','d3','evalculist'
     };
   });
 
+  proto.table = itemsFirst(function (items, columns) {
+    var columnValues = {};
+    _.each(items, function (rowItem, i) {
+      _.each(rowItem.items, function (cellItem) {
+        var val = cellItem.valueOf();
+        var column = cellItem.key;
+        columnValues[column] || (columnValues[column] = []);
+        columnValues[column][i] = val;
+      });
+    });
+    if (columns) {
+      columns = itemsIfItem(columns).map(proto.valueOf);
+    } else {
+      columns = _.keys(columnValues);
+    }
+    var html = '<table>' +
+      '<thead>' +
+        '<tr>' +
+          '<th class="index-column"></th>' +
+          columns.map(function (column) {
+            return '<th>' + _.escape(column) + '</th>';
+          }).join('') +
+        '</tr>' +
+      '</thead>' +
+      '<tbody>' +
+        items.map(function (item, i) {
+          return '<tr>' +
+            '<td class="index-column">' + i + '</td>' +
+            columns.map(function (column) {
+              var val = columnValues[column] ? columnValues[column][i] : '';
+              if (val == null) val = '';
+              return '<td>' + _.escape(val) + '</td>';
+            }).join('') +
+          '</tr>';
+        }).join('') +
+      '</tbody>' +
+    '</table>';
+    return {
+      toString: _.constant('[Table]'),
+      toHTML: _.constant(html)
+    };
+  });
+
   proto.uniq = proto.unique = itemsFirst(function (items) {
     items = _.map(items, proto.valueOf);
     return _.uniq(items);
+  });
+
+  proto.ungroup = itemsFirst(function (items, depth) {
+    depth = +(depth == null ? 1 : depth);
+    if (_.isNaN(depth)) return depth;
+    while (--depth >= 0) {
+      items = _.reduce(items, function (ungroupedItems, item) {
+        return ungroupedItems.concat(item.items);
+      }, []);
+    }
+    return items;
   });
 
   proto.slice = itemsFirst(function (items, start, end) {
@@ -56484,9 +56596,8 @@ calculist.require(['Item','removeHTML','_'], function (Item, removeHTML, _) {
   };
 
   Item.prototype.getComputedHTML = function() {
-    var val;
     this.valueOf();
-    val = this.val;
+    var val = this.val;
     if (val != null) {
       if (_.isPlainObject(val) && val.toHTML) {
         val = val.toHTML();
@@ -56495,7 +56606,7 @@ calculist.require(['Item','removeHTML','_'], function (Item, removeHTML, _) {
       }
       val = "<span class='value'>" + val + "</span>";
       if (this.key) {
-        return "<span class='key'>" + (this.formatKey(this.key)) + "</span>: " + val;
+        return "<span class='key'>" + this.formatKey(this.key) + "</span> <span class='separator'>" + this.parsedText.separator + "</span> " + val;
       } else {
         return val;
       }
@@ -57860,8 +57971,9 @@ calculist.register('itemOfDrag', ['transaction','$'], function (transaction, $) 
       $standin.insertAfter(itemOfDrag.$el);
       itemOfDrag.$el.addClass('dragging');
     }
+    var scrollTop = document.body.scrollTop || window.scrollY || 0;
     itemOfDrag.$el.offset({
-      top: (e.clientY + document.body.scrollTop) - 10,
+      top: (e.clientY + scrollTop) - 10,
       left: e.clientX + 3,
     });
   });
