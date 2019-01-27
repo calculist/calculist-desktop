@@ -55206,10 +55206,13 @@ calculist.register('createComputationContextObject', ['_','ss','d3','evalculist'
 
   var valIfItem = function (item) { return isItem(item) ? item.valueOf() : item; };
   var itemsIfItem = function (item) { return isItem(item) ? item.items : item; };
+  var arrayWithItemsFirst = function (array) {
+    array[0] = itemsIfItem(array[0]);
+    return array;
+  };
   var itemsFirst = function (fn) {
     return function () {
-      arguments[0] = itemsIfItem(arguments[0]);
-      return fn.apply(this, arguments);
+      return fn.apply(this, arrayWithItemsFirst(arguments));
     };
   };
   var allItemsAndValues = function (fn) {
@@ -56731,7 +56734,7 @@ calculist.register('item.handleBlur', ['_','eventHub'], function (_, eventHub) {
     item.showLinkButtons();
     var $input = item.$("#input" + item.id);
     $input.removeClass('focus');
-    $input.css({minHeight: 'auto'});
+    $input.css({minHeight: '16px'});
     eventHub.trigger('item.handleBlur', item);
   };
 
@@ -57157,8 +57160,8 @@ calculist.require(['Item','_','parseTextDoc','getNewGuid','transaction','cursorP
     var selection = _.pick(document.getSelection(),
         'anchorOffset',
         // 'baseOffset',
-        'extentOffset'
-        // 'focusOffset',
+        'extentOffset',
+        'focusOffset'
         // 'rangeCount'
         );
 
@@ -57168,9 +57171,10 @@ calculist.require(['Item','_','parseTextDoc','getNewGuid','transaction','cursorP
       $input = this.$('#input' + this.id);
       text = $input.text();
     }
-    var start = Math.min(selection.anchorOffset, selection.extentOffset),
-        count = Math.max(selection.anchorOffset, selection.extentOffset) - start,
-        textArray = _.toArray(text);
+    var extentOffset = _.isNumber(selection.extentOffset) ? selection.extentOffset : selection.focusOffset;
+    var start = Math.min(selection.anchorOffset, extentOffset);
+    var count = Math.max(selection.anchorOffset, extentOffset) - start;
+    var textArray = _.toArray(text);
 
     textArray.splice(start, count, insertingText);
 
@@ -59017,7 +59021,7 @@ calculist.register('cursorPosition', ['_'], function (_) {
       return Math.max(0, cursorPositionMinusDepth(depth, previousCursorPosition));
     },
     getWithCurrentOffset: function (text, depth) {
-      return Math.max(0, cursorPositionMinusDepth(depth, calculateCursorPosition(text, depth, document.getSelection().baseOffset)));
+      return Math.max(0, cursorPositionMinusDepth(depth, calculateCursorPosition(text, depth, document.getSelection().anchorOffset)));
     }
   };
 
@@ -59157,7 +59161,7 @@ calculist.register('zoomPage',['_','$','Promise','lmSessionStorage','getItemByGu
       return false;
     },
     attach: function (item) {
-      $page = $('<div class="page zoom-page"></div>');
+      $page = $('<div class="page zoom-page" style="position: absolute;"></div>');
       originalDimensions = dimensionAttrs.reduce(function (dimensions, attr) {
         dimensions[attr] = item.$el[attr]();
         return dimensions;
